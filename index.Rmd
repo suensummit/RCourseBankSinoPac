@@ -1,0 +1,38 @@
+---
+title: "R ETL Crash Course"
+subtitle: Week 2
+author: 
+    name: "Summit Suen"
+    affiliation: 木刻思股份有限公司
+    email: "course@agilearning.io, summit.suen@data-sci.info"
+    website: "https://data-sci.info"
+date: "Jan 04, 2016"
+output: html_document
+---
+---
+## R Basic Recap
+
+```{r}
+## View Data
+head(iris)
+tail(iris)
+
+## View(iris)
+summary(iris)
+
+## explor object
+attributes(iris)
+str(iris)
+class(iris)
+
+## data shape
+dim(iris)
+ncol(iris)
+nrow(iris)
+```
+
+## 
+
+```{r}
+
+```
