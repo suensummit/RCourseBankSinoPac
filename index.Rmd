@@ -6,7 +6,7 @@ author:
     affiliation: 木刻思股份有限公司
     email: "course@agilearning.io, summit.suen@data-sci.info"
     website: "https://data-sci.info"
-date: "Jan 04, 2016"
+date: "January 04, 2016"
 output: html_document
 ---
 ---
@@ -34,5 +34,8 @@ nrow(iris)
 ## 
 
 ```{r}
-
+library(gdata)
+library(XLConnect)
+library(xlsx)
+library(readxl)
 ```

@@ -9,6 +9,7 @@
 <meta name="generator" content="pandoc" />
 
 
+<meta name="date" content="2016-01-04" />
 
 <title>R ETL Crash Course</title>
 
@@ -66,7 +67,7 @@ img {
 <address class="author_afil">
 木刻思股份有限公司<br><a class="author_email" href="mailto:#"><a href="mailto:course@agilearning.io">course@agilearning.io</a>, <a href="mailto:summit.suen@data-sci.info">summit.suen@data-sci.info</a></a>
 </address>
-<h4 class="date"><em>Jan 04, 2016</em></h4>
+<h4 class="date"><em>January 04, 2016</em></h4>
 </div>
 
 
@@ -144,6 +145,41 @@ dim(iris)</code></pre>
 </div>
 <div id="section" class="section level2">
 <h2></h2>
+<pre class="r"><code>library(gdata)</code></pre>
+<pre><code>## gdata: read.xls support for 'XLS' (Excel 97-2004) files ENABLED.
+## 
+## gdata: read.xls support for 'XLSX' (Excel 2007+) files ENABLED.
+## 
+## Attaching package: 'gdata'
+## 
+## The following object is masked from 'package:stats':
+## 
+##     nobs
+## 
+## The following object is masked from 'package:utils':
+## 
+##     object.size</code></pre>
+<pre class="r"><code>library(XLConnect)</code></pre>
+<pre><code>## Loading required package: XLConnectJars
+## XLConnect 0.2-11 by Mirai Solutions GmbH [aut],
+##   Martin Studer [cre],
+##   The Apache Software Foundation [ctb, cph] (Apache POI, Apache Commons
+##     Codec),
+##   Stephen Colebourne [ctb, cph] (Joda-Time Java library)
+## http://www.mirai-solutions.com ,
+## http://miraisolutions.wordpress.com</code></pre>
+<pre class="r"><code>library(xlsx)</code></pre>
+<pre><code>## Loading required package: rJava
+## Loading required package: xlsxjars
+## 
+## Attaching package: 'xlsx'
+## 
+## The following objects are masked from 'package:XLConnect':
+## 
+##     createFreezePane, createSheet, createSplitPane, getCellStyle,
+##     getSheets, loadWorkbook, removeSheet, saveWorkbook,
+##     setCellStyle, setColumnWidth, setRowHeight</code></pre>
+<pre class="r"><code>library(readxl)</code></pre>
 </div>
 
 
