@@ -1,6 +1,6 @@
 packages_w1 <- c("rvest", "stringr", "selectr", "quantmod", "devtools", "rjson", "jsonlite", "rlist", "magrittr", "pipeR")
 packages_w2 <- c("rJava", "dplyr", "data.table", "ROracle", "RODBC", "RJDBC", "RMySQL", "RSQLite", "XLConnect", "gdata", "xlsx", "readxl")
-packages_w3 <- c("ggplot2", "shiny", "rmarkdown", "circlize")
+packages_w3 <- c("ggplot2", "shiny", "rmarkdown", "circlize", "dygraphs")
 packages_w4 <- c("Lahman", "e1071", "jiebaR", "xgboost", "irlba", "LiblineaR", "SparseM", "xgboost", "tm", "tmcn", "wordcloud", "koRpus", "Rweibo", "openNLP", "twitteR", "openNLPdata", "ROAuth", "corpora", "languageR", "zipfR")
 packages <- c(packages_w1, packages_w2, packages_w3, packages_w4)
 

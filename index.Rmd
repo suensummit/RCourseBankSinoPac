@@ -1,7 +1,7 @@
 ---
 title: "R ETL Crash Course"
 subtitle: Week 2
-author: 
+author:
     name: "Summit Suen"
     affiliation: 木刻思股份有限公司
     email: "course@agilearning.io, summit.suen@data-sci.info"
@@ -31,11 +31,16 @@ ncol(iris)
 nrow(iris)
 ```
 
-## 
+##
 
 ```{r}
+## Need Perl on Windows
 library(gdata)
+
+## Need Java/rJava
 library(XLConnect)
 library(xlsx)
+
+##
 library(readxl)
 ```
