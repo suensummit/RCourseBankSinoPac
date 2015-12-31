@@ -9,7 +9,29 @@ author:
 date: "January 04, 2016"
 output: html_document
 ---
+
+
 ---
+
+## rJava Installation
+
+在 Windows 系統裡使用 R，有時候會遇到一些棘手的 error；其中除了跟系統編碼（顯示亂碼）相關的問題以外，有一大宗都跟 `rJava` 這個套件有關。
+
+今天先帶領大家操作一次，當遇到 `rJava` 問題時，可以如何去解決。
+
+1. 下載 64 bits 版本的 Java（for Windows）|[Download](http://javadl.sun.com/webapps/download/AutoDL?BundleId=113219)
+
+<<<<<截圖>>>>>
+
+2. 設定環境變數
+
+```{r, eval=FALSE}
+Sys.getenv("JAVA_HOME")
+Sys.setenv("JAVA_HOME"="path/where/java/installed")
+```
+
+<<<<<截圖>>>>>
+
 ## R Basic Recap
 
 ```{r}
@@ -31,7 +53,7 @@ ncol(iris)
 nrow(iris)
 ```
 
-##
+## 
 
 ```{r}
 ## Need Perl on Windows
@@ -43,4 +65,40 @@ library(xlsx)
 
 ##
 library(readxl)
+```
+
+
+
+## R 與 Database 的串接：以 SQLite 為例
+
+
+
+```{r}
+library(DBI)
+# Create an ephemeral in-memory RSQLite database
+con <- dbConnect(RSQLite::SQLite(), ":memory:")
+
+dbListTables(con)
+dbWriteTable(con, "mtcars", mtcars)
+dbListTables(con)
+
+dbListFields(con, "mtcars")
+dbReadTable(con, "mtcars")
+
+# You can fetch all results:
+res <- dbSendQuery(con, "SELECT * FROM mtcars WHERE cyl = 4")
+dbFetch(res)
+dbClearResult(res)
+
+# Or a chunk at a time
+res <- dbSendQuery(con, "SELECT * FROM mtcars WHERE cyl = 4")
+while(!dbHasCompleted(res)){
+  chunk <- dbFetch(res, n = 5)
+  print(nrow(chunk))
+}
+# Clear the result
+dbClearResult(res)
+
+# Disconnect from the database
+dbDisconnect(con)
 ```
