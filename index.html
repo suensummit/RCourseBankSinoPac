@@ -70,22 +70,45 @@ img {
 <h4 class="date"><em>January 04, 2016</em></h4>
 </div>
 
+<div id="TOC">
+<ul>
+<li><a href="#rjava-installation">rJava Installation</a><ul>
+<li><a href="#-64-bits--javafor-windowsdownload">1. 下載 64 bits 版本的 Java（for Windows）|<a href="http://javadl.sun.com/webapps/download/AutoDL?BundleId=113219">Download</a></a></li>
+<li><a>2. 設定環境變數</a></li>
+</ul></li>
+<li><a href="#r-basic-recap">R Basic Recap</a></li>
+<li><a href="#-etl-etl">今天的題目是 ETL：什麼是 ETL？</a></li>
+<li><a href="#data-schema-matters">Data Schema Matters</a></li>
+<li><a>基本資料讀寫</a></li>
+<li><a href="#-excel-">處理 Excel 資料</a><ul>
+<li><a href="#excel--table">Excel 不等於 Table!</a></li>
+</ul></li>
+<li><a>觀察</a></li>
+<li><a href="#r--database--sqlite-">R 與 Database 的串接：以 SQLite 為例</a></li>
+<li><a href="#take-home-messages">Take Home Messages</a><ul>
+<li><a href="#-sys.getenv-sys.setenv">- 環境變數 <code>Sys.getenv()</code> <code>Sys.setenv()</code></a></li>
+<li><a>- 資料結構是重要的，三思而後行！</a></li>
+</ul></li>
+<li><a href="#q-a">Q &amp; A</a></li>
+</ul>
+</div>
 
 <hr />
 <div id="rjava-installation" class="section level2">
 <h2>rJava Installation</h2>
 <p>在 Windows 系統裡使用 R，有時候會遇到一些棘手的 error；其中除了跟系統編碼（顯示亂碼）相關的問題以外，有一大宗都跟 <code>rJava</code> 這個套件有關。</p>
 <p>今天先帶領大家操作一次，當遇到 <code>rJava</code> 問題時，可以如何去解決。</p>
-<ol style="list-style-type: decimal">
-<li>下載 64 bits 版本的 Java（for Windows）|<a href="http://javadl.sun.com/webapps/download/AutoDL?BundleId=113219">Download</a></li>
-</ol>
+<div id="-64-bits--javafor-windowsdownload" class="section level3">
+<h3>1. 下載 64 bits 版本的 Java（for Windows）|<a href="http://javadl.sun.com/webapps/download/AutoDL?BundleId=113219">Download</a></h3>
 <p>&lt;&lt;&lt;&lt;<截圖>&gt;&gt;&gt;&gt;</p>
-<ol start="2" style="list-style-type: decimal">
-<li>設定環境變數</li>
-</ol>
+</div>
+<div class="section level3">
+<h3>2. 設定環境變數</h3>
 <pre class="r"><code>Sys.getenv(&quot;JAVA_HOME&quot;)
 Sys.setenv(&quot;JAVA_HOME&quot;=&quot;path/where/java/installed&quot;)</code></pre>
 <p>&lt;&lt;&lt;&lt;<截圖>&gt;&gt;&gt;&gt;</p>
+<hr />
+</div>
 </div>
 <div id="r-basic-recap" class="section level2">
 <h2>R Basic Recap</h2>
@@ -157,10 +180,12 @@ dim(iris)</code></pre>
 <pre><code>## [1] 5</code></pre>
 <pre class="r"><code>nrow(iris)</code></pre>
 <pre><code>## [1] 150</code></pre>
+<hr />
 </div>
 <div id="-etl-etl" class="section level2">
 <h2>今天的題目是 ETL：什麼是 ETL？</h2>
 <p>&lt;&lt;&lt;&lt;<嘴砲>&gt;&gt;&gt;&gt;</p>
+<hr />
 </div>
 <div id="data-schema-matters" class="section level2">
 <h2>Data Schema Matters</h2>
@@ -169,11 +194,25 @@ dim(iris)</code></pre>
 <p>左右兩欄的表格應該整併成同一欄</p>
 <p>並且加入時間欄位</p>
 <p>塞進資料庫／檔案做儲存</p>
+<hr />
 </div>
 <div class="section level2">
 <h2>基本資料讀寫</h2>
 <p>其他都可以忘記，至少要記得 <code>read.table</code></p>
+<pre class="r"><code>library(RCurl)</code></pre>
+<pre><code>## Loading required package: bitops</code></pre>
+<pre class="r"><code>Cl_info = read.table(sep=&quot;,&quot;, header=TRUE, stringsAsFactors=F,           
+file= textConnection(
+getURL(&quot;https://raw.githubusercontent.com/ntuaha/R_ETL_DSC_2015/gh-pages/cl_info_other.csv&quot;)))
+
+# Cl_info = read.table(file=&quot;./cl_info_other.csv&quot;,sep=&quot;,&quot;,stringsAsFactors=F,header=T)</code></pre>
 <p><a href="https://survey.banking.gov.tw/statis/stmain.jsp?sys=100&amp;funid=r100" class="uri">https://survey.banking.gov.tw/statis/stmain.jsp?sys=100&amp;funid=r100</a></p>
+<hr />
+</div>
+<div id="-excel-" class="section level2">
+<h2>處理 Excel 資料</h2>
+<div id="excel--table" class="section level3">
+<h3>Excel 不等於 Table!</h3>
 <pre class="r"><code>## Need Perl on Windows
 library(gdata)</code></pre>
 <pre><code>## gdata: read.xls support for 'XLS' (Excel 97-2004) files ENABLED.
@@ -201,6 +240,13 @@ library(XLConnect)</code></pre>
 ## http://miraisolutions.wordpress.com</code></pre>
 <pre class="r"><code>library(xlsx)</code></pre>
 <pre><code>## Loading required package: rJava
+## 
+## Attaching package: 'rJava'
+## 
+## The following object is masked from 'package:RCurl':
+## 
+##     clone
+## 
 ## Loading required package: xlsxjars
 ## 
 ## Attaching package: 'xlsx'
@@ -212,9 +258,52 @@ library(XLConnect)</code></pre>
 ##     setCellStyle, setColumnWidth, setRowHeight</code></pre>
 <pre class="r"><code>##
 library(readxl)</code></pre>
+<hr />
+</div>
+</div>
+<div class="section level2">
+<h2>觀察</h2>
+<p>首先，觀察檔案的格式、欄位、資料型態</p>
+<pre class="r"><code># library(readxl)
+library(xlsx)
+library(magrittr)
+credit_10401 &lt;- read.xlsx2(&quot;~/Downloads/10401信用卡重要資訊揭露.xlsx&quot;, sheetIndex = 1)
+# 放 View 的 table 截圖
+# View(credit_10401)
+as.character(credit_10401[4,][7][[1]])</code></pre>
+<pre><code>## [1] &quot;未到期&quot;</code></pre>
+<pre class="r"><code>as.character(credit_10401[4:7,][7][[1]])</code></pre>
+<pre><code>## [1] &quot;未到期&quot;   &quot;分期付款&quot; &quot;餘額&quot;     &quot;　&quot;</code></pre>
+<pre class="r"><code>paste0(as.character(credit_10401[4:7,][7][[1]]))</code></pre>
+<pre><code>## [1] &quot;未到期&quot;   &quot;分期付款&quot; &quot;餘額&quot;     &quot;　&quot;</code></pre>
+<pre class="r"><code># as.character(credit_10401[4,])
+# colnames(credit_10401) &lt;- as.character(credit_10401[4,])
+credit_10401 &lt;- credit_10401[8:45,]
+# 放 View 的 table 截圖
+# View(credit_10401)
+str(credit_10401)</code></pre>
+<pre><code>## 'data.frame':    38 obs. of  14 variables:
+##  $ 信用卡重要業務及財務資訊.資訊揭露.: Factor w/ 56 levels &quot;&quot;,&quot;　&quot;,&quot;　　　　　　　月，須俟持卡人將所積欠各期最低應繳金額全部償還後，始得回復為未逾期。&quot;,..: 48 46 31 42 50 35 17 25 32 56 ...
+##  $ X.                                : Factor w/ 41 levels &quot;&quot;,&quot;　&quot;,&quot;10501&quot;,..: 15 5 25 36 35 24 23 16 27 38 ...
+##  $ X..1                              : Factor w/ 41 levels &quot;&quot;,&quot;　&quot;,&quot;1012732&quot;,..: 6 30 15 31 29 14 13 10 21 28 ...
+##  $ X..2                              : Factor w/ 41 levels &quot;&quot;,&quot;　&quot;,&quot;1025&quot;,..: 26 29 15 10 7 21 8 19 31 33 ...
+##  $ X..3                              : Factor w/ 41 levels &quot;&quot;,&quot;　&quot;,&quot;1&quot;,&quot;1016&quot;,..: 8 35 34 36 39 20 24 12 17 25 ...
+##  $ X..4                              : Factor w/ 42 levels &quot;&quot;,&quot;　&quot;,&quot;10469862&quot;,..: 18 14 35 6 36 12 38 37 8 33 ...
+##  $ X..5                              : Factor w/ 44 levels &quot;&quot;,&quot;　&quot;,&quot;0&quot;,&quot;10009057&quot;,..: 9 20 12 37 34 33 14 29 4 17 ...
+##  $ X..6                              : Factor w/ 42 levels &quot;&quot;,&quot;　&quot;,&quot;1030167&quot;,..: 36 23 11 25 21 3 4 6 19 7 ...
+##  $ X..7                              : Factor w/ 40 levels &quot;&quot;,&quot;　&quot;,&quot;0&quot;,&quot;1&quot;,..: 13 27 24 12 5 31 33 36 22 7 ...
+##  $ X..8                              : Factor w/ 42 levels &quot;&quot;,&quot;0&quot;,&quot;0.041125082561718776&quot;,..: 25 26 34 14 4 12 32 10 6 3 ...
+##  $ X..9                              : Factor w/ 27 levels &quot;&quot;,&quot;0&quot;,&quot;0.0028255304511166915&quot;,..: 14 16 21 2 2 5 15 2 2 9 ...
+##  $ X..10                             : Factor w/ 42 levels &quot;&quot;,&quot; &quot;,&quot;(%)&quot;,&quot;100.42846349557698&quot;,..: 28 13 20 12 10 37 14 34 18 11 ...
+##  $ X..11                             : Factor w/ 32 levels &quot;&quot;,&quot; &quot;,&quot;　&quot;,&quot;0&quot;,..: 18 13 4 23 4 4 4 14 16 4 ...
+##  $ X..12                             : Factor w/ 32 levels &quot;&quot;,&quot;0&quot;,&quot;113764&quot;,..: 16 11 2 21 2 2 2 12 14 2 ...</code></pre>
+<pre class="r"><code>credit_10401_2 &lt;- lapply(credit_10401[4:7,], as.character)
+row.names(credit_10401) &lt;- NULL</code></pre>
+<hr />
 </div>
 <div id="r--database--sqlite-" class="section level2">
 <h2>R 與 Database 的串接：以 SQLite 為例</h2>
+<pre class="r"><code>res &lt;- read.csv(&quot;bank/bank-full.csv&quot;, header = TRUE, sep = &quot;;&quot;)</code></pre>
 <pre class="r"><code>library(DBI)
 # Create an ephemeral in-memory RSQLite database
 con &lt;- dbConnect(RSQLite::SQLite(), &quot;:memory:&quot;)
@@ -295,6 +384,20 @@ dbClearResult(res)</code></pre>
 <pre class="r"><code># Disconnect from the database
 dbDisconnect(con)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
+<hr />
+</div>
+<div id="take-home-messages" class="section level2">
+<h2>Take Home Messages</h2>
+<div id="-sys.getenv-sys.setenv" class="section level3">
+<h3>- 環境變數 <code>Sys.getenv()</code> <code>Sys.setenv()</code></h3>
+</div>
+<div class="section level3">
+<h3>- 資料結構是重要的，三思而後行！</h3>
+<hr />
+</div>
+</div>
+<div id="q-a" class="section level2">
+<h2>Q &amp; A</h2>
 </div>
 
 
