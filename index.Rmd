@@ -10,7 +10,6 @@ date: "January 04, 2016"
 output: html_document
 ---
 
-
 ---
 
 ## rJava Installation
@@ -53,7 +52,31 @@ ncol(iris)
 nrow(iris)
 ```
 
-## 
+## 今天的題目是 ETL：什麼是 ETL？
+
+<<<<<嘴砲>>>>>
+
+## Data Schema Matters
+
+資料結構是重要的
+
+以第一週 Yahoo Stock 資料為例
+
+左右兩欄的表格應該整併成同一欄
+
+並且加入時間欄位
+
+塞進資料庫／檔案做儲存
+
+## 基本資料讀寫
+
+其他都可以忘記，至少要記得 `read.table`
+
+```{r}
+
+```
+
+https://survey.banking.gov.tw/statis/stmain.jsp?sys=100&funid=r100
 
 ```{r}
 ## Need Perl on Windows

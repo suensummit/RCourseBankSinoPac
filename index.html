@@ -158,8 +158,22 @@ dim(iris)</code></pre>
 <pre class="r"><code>nrow(iris)</code></pre>
 <pre><code>## [1] 150</code></pre>
 </div>
-<div id="section" class="section level2">
-<h2></h2>
+<div id="-etl-etl" class="section level2">
+<h2>今天的題目是 ETL：什麼是 ETL？</h2>
+<p>&lt;&lt;&lt;&lt;<嘴砲>&gt;&gt;&gt;&gt;</p>
+</div>
+<div id="data-schema-matters" class="section level2">
+<h2>Data Schema Matters</h2>
+<p>資料結構是重要的</p>
+<p>以第一週 Yahoo Stock 資料為例</p>
+<p>左右兩欄的表格應該整併成同一欄</p>
+<p>並且加入時間欄位</p>
+<p>塞進資料庫／檔案做儲存</p>
+</div>
+<div class="section level2">
+<h2>基本資料讀寫</h2>
+<p>其他都可以忘記，至少要記得 <code>read.table</code></p>
+<p><a href="https://survey.banking.gov.tw/statis/stmain.jsp?sys=100&amp;funid=r100" class="uri">https://survey.banking.gov.tw/statis/stmain.jsp?sys=100&amp;funid=r100</a></p>
 <pre class="r"><code>## Need Perl on Windows
 library(gdata)</code></pre>
 <pre><code>## gdata: read.xls support for 'XLS' (Excel 97-2004) files ENABLED.
