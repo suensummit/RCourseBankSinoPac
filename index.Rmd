@@ -10,20 +10,24 @@ date: "January 04, 2016"
 output: 
   html_document:
     toc: true
+    theme: readable
+    css: assets/css/main.css
 ---
 ---
 
-## rJava Installation
+## 暖身
+
+### 環境設定：rJava Installation
 
 在 Windows 系統裡使用 R，有時候會遇到一些棘手的 error；其中除了跟系統編碼（顯示亂碼）相關的問題以外，有一大宗都跟 `rJava` 這個套件有關。
 
-今天先帶領大家操作一次，當遇到 `rJava` 問題時，可以如何去解決。
+今天先帶領大家操作一次，當遇到問題時，可以如何去解決。
 
-### 1. 下載 64 bits 版本的 Java（for Windows）|[Download](http://javadl.sun.com/webapps/download/AutoDL?BundleId=113219)
+1. 下載 64 bits 版本的 Java（for Windows）[Download](http://javadl.sun.com/webapps/download/AutoDL?BundleId=113219)
 
 <<<<<截圖>>>>>
 
-### 2. 設定環境變數
+2. 設定環境變數
 
 ```{r, eval=FALSE}
 Sys.getenv("JAVA_HOME")
@@ -34,7 +38,25 @@ Sys.setenv("JAVA_HOME"="path/where/java/installed")
 
 ---
 
-## R Basic Recap
+### 練習操作：R Basic Recap
+
+小提示 Tips
+
+- 工作目錄 working directory
+    - `getwd`
+    - `setwd`
+    - `dir`
+   
+- 自動補齊 autocompletion
+    - `tab`
+
+- 執行命令 source
+    - `control` + `enter`
+
+- 註解增減 comment
+    - `shift` + `control` + `c`
+
+<!-- end of list -->
 
 ```{r}
 ## View Data
@@ -59,6 +81,22 @@ nrow(iris)
 
 ## 今天的題目是 ETL：什麼是 ETL？
 
+### E = Extraction
+
+### T = Transform
+
+### L = Load
+
+### 今天會用到的套件／重要函式：
+
+- `readLine` | `read.table`
+- `readxl` | `xlsx` | `XLConnect` | `iconv`
+- `magrittr`
+- `dplyr` | `reshape2`
+- `RSQLite` | `DBI`
+
+<!-- end of list -->
+
 <<<<<嘴砲>>>>>
 
 ---
@@ -69,11 +107,43 @@ nrow(iris)
 
 以第一週 Yahoo Stock 資料為例
 
+[2451 創見](http://tw.stock.yahoo.com/d/s/major_2451.html)
+
+```{r}
+library(httr)
+library(rvest)
+
+## Connector
+Target_URL = "http://tw.stock.yahoo.com/d/s/major_2451.html"
+res <- GET(Target_URL)
+doc_str <- content(res, type = "text", encoding = "big5")
+
+## Parser
+if (.Platform$OS.type == "windows"){
+  Sys.setlocale(category='LC_ALL', locale='C')
+  data_table <- doc_str %>% read_html(encoding = "big-5") %>% html_nodes(xpath = "//table[1]//table[2]") %>% html_table(header=TRUE)
+  Sys.setlocale(category='LC_ALL', locale='cht')
+  data_table <- apply(data_table[[1]],2,function(x) iconv(x,from = "utf8"))
+  colnames(data_table) <- iconv(colnames(data_table), from = "utf8")
+}  else{
+  data_table <- doc_str %>% read_html(encoding = "big-5") %>% html_nodes(xpath = "//table[1]//table[2]") %>% html_table(header=TRUE)
+  data_table <- data_table[[1]]
+}
+# View(data_table)
+data_table
+```
+
 左右兩欄的表格應該整併成同一欄
 
 並且加入時間欄位
 
 塞進資料庫／檔案做儲存
+
+- 範例：Yahoo Stock
+
+- 練習：Yahoo Stock
+
+- 作業：無
 
 ---
 
@@ -88,9 +158,17 @@ file= textConnection(
 getURL("https://raw.githubusercontent.com/ntuaha/R_ETL_DSC_2015/gh-pages/cl_info_other.csv")))
 
 # Cl_info = read.table(file="./cl_info_other.csv",sep=",",stringsAsFactors=F,header=T)
+
+head(Cl_info)
 ```
 
-https://survey.banking.gov.tw/statis/stmain.jsp?sys=100&funid=r100
+[銀行局](https://survey.banking.gov.tw/statis/stmain.jsp?sys=100&funid=r100)
+
+- 範例：房貸餘額 csv
+
+- 練習：
+
+- 作業：無
 
 ---
 
@@ -117,12 +195,12 @@ library(readxl)
 首先，觀察檔案的格式、欄位、資料型態
 
 ```{r}
-# library(readxl)
 library(xlsx)
 library(magrittr)
-credit_10401 <- read.xlsx2("~/Downloads/10401信用卡重要資訊揭露.xlsx", sheetIndex = 1)
+credit_10401 <- read.xlsx2("~/Downloads/10401信用卡重要資訊揭露.xlsx", sheetIndex = 1, startRow = 8, endRow = 45, as.data.frame = TRUE)
 # 放 View 的 table 截圖
 # View(credit_10401)
+str(credit_10401)
 as.character(credit_10401[4,][7][[1]])
 as.character(credit_10401[4:7,][7][[1]])
 paste0(as.character(credit_10401[4:7,][7][[1]]))
@@ -132,13 +210,60 @@ credit_10401 <- credit_10401[8:45,]
 # 放 View 的 table 截圖
 # View(credit_10401)
 str(credit_10401)
-credit_10401_2 <- lapply(credit_10401[4:7,], as.character)
+credit_10401_2 <- credit_10401
+credit_10401_2[-1] <- lapply(credit_10401[-1], as.character)
+credit_10401_2[-1] <- lapply(credit_10401_2[-1], as.numeric)
+# View(credit_10401_2)
+str(credit_10401_2)
 row.names(credit_10401) <- NULL
+```
+
+```{r}
+library(XLConnect)
+wb = XLConnect::loadWorkbook("~/Downloads/29010.xls")
+data = XLConnect::readWorksheet(wb, sheet = "9-1")
+head(data)
+str(data)
+data2 <- data[seq(from = 13, to = 35, by = 2),]
+head(data2)
+str(data2)
+```
+
+```{r, warning=FALSE}
+library(readxl)
+filename <- "~/Downloads/29010.xls"
+filename <- "~/Downloads/10401信用卡重要資訊揭露.xlsx"
+sheetNames <- excel_sheets(filename)
+resxl <- read_excel(filename, sheet = sheetNames[1], col_names = TRUE, skip = 4)
+resxl <- resxl[4:41,]
+resxl[-1] <- lapply(resxl[-1], as.numeric)
+str(resxl)
+barplot(height = resxl$流通卡數, names.arg = resxl$金融機構名稱)
+# View(resxl)
+resxl_2 <- read_excel("~/Downloads/29010.xls", sheet = 2, col_names = FALSE)
+# View(resxl_2)
+str(resxl_2)
 ```
 
 ---
 
+## dplyr
+
+接下來，真正開始用 R 來做 ETL 資料清理的工作。
+
+### 簡介 `dplyr`
+
+### 延伸 `data.table`
+
+### 延伸 `rlist`
+
+---
+
 ## R 與 Database 的串接：以 SQLite 為例
+
+http://mlr.cs.umass.edu/ml/datasets/Bank+Marketing#
+
+[Download Sample file](http://mlr.cs.umass.edu/ml/machine-learning-databases/00222/bank.zip)
 
 ```{r}
 res <- read.csv("bank/bank-full.csv", header = TRUE, sep = ";")
