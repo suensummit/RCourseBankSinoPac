@@ -12,7 +12,7 @@ output:
     toc: true
     theme: spacelab
     highlight: espresso
-    css: assets/css/main.css
+    css: main.css
 ---
 ---
 
