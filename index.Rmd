@@ -10,7 +10,8 @@ date: "January 04, 2016"
 output: 
   html_document:
     toc: true
-    theme: readable
+    theme: spacelab
+    highlight: espresso
     css: assets/css/main.css
 ---
 ---
@@ -161,9 +162,7 @@ data_table
 
 ```{r}
 library(RCurl)
-Cl_info = read.table(sep=",", header=TRUE, stringsAsFactors=F,           
-file= textConnection(
-getURL("https://raw.githubusercontent.com/ntuaha/R_ETL_DSC_2015/gh-pages/cl_info_other.csv")))
+Cl_info = read.table(sep=",", header=TRUE, stringsAsFactors=F, file=textConnection(getURL("https://raw.githubusercontent.com/ntuaha/R_ETL_DSC_2015/gh-pages/cl_info_other.csv")))
 
 # Cl_info = read.table(file="./cl_info_other.csv",sep=",",stringsAsFactors=F,header=T)
 
@@ -226,19 +225,16 @@ library(readxl)
 
 ```{r}
 filename <- "~/Downloads/29010.xls"
-raw <- readLines(filename, n = 10, encoding = "BIG-5")
-iconv(raw[1], from = "BIG-5", to = "UTF-8")
+filename <- "~/Downloads/10401信用卡重要資訊揭露.xlsx"
+raw <- readLines(filename, n = 10L, encoding = "BIG-5", warn = FALSE)
+raw <- iconv(raw, from = "BIG-5", to = "UTF-8")
+
 ```
 
 ### 預先設定欄位的大小及資料型態 `colClasses`，讓讀檔速度加快（執行時不用去猜資料的大小、格式與資料型態）
 
 ```{r, eval=FALSE}
-ubike = read.csv('檔案路徑', 
-          colClasses = c("factor","integer","integer","factor","factor",
-                         "numeric","numeric","integer","numeric","integer",
-                         "integer","numeric","numeric", "integer","integer",
-                         "numeric","numeric","numeric", "numeric","numeric",
-                         "numeric"),fileEncoding = 'utf8')
+ = read.csv('檔案路徑', colClasses = c("factor","integer","integer","numeric","numeric","numeric","numeric","integer","numeric","integer","integer","numeric","numeric", "integer","integer","numeric","numeric","numeric", "numeric","numeric","numeric"), fileEncoding = 'utf8')
 ```
 
 ### 一般來說，使用 `XLConnect::existsSheet` 取得 Excel 檔案的表單資訊（sheet），再用 `xlsx::read.xlsx2` 讀檔（較快）
@@ -246,19 +242,20 @@ ubike = read.csv('檔案路徑',
 ```{r}
 library(xlsx)
 library(magrittr)
-credit_10401 <- read.xlsx2("~/Downloads/10401信用卡重要資訊揭露.xlsx", sheetIndex = 1, startRow = 8, endRow = 45, as.data.frame = TRUE)
+filename <- "~/Downloads/29010.xls"
+filename <- "~/Downloads/10401信用卡重要資訊揭露.xlsx"
+credit_rownames <- read.xlsx2(filename, sheetIndex = 1, startRow = 4, endRow = 8, as.data.frame = TRUE, header = FALSE, colClasses = c("character", "character", "character", "character"))
+credit_10401 <- read.xlsx2(filename, sheetIndex = 1, startRow = 9, endRow = 45, as.data.frame = TRUE, header = FALSE, colClasses = c("character", "integer", "integer", "integer", "integer", "integer", "integer", "integer", "integer", "numeric", "numeric", "numeric", "integer", "integer"))
 # 放 View 的 table 截圖
 # View(credit_10401)
 str(credit_10401)
-as.character(credit_10401[4,][7][[1]])
-as.character(credit_10401[4:7,][7][[1]])
-paste0(as.character(credit_10401[4:7,][7][[1]]))
+# as.character(credit_10401[1,][7][[1]])
+# as.character(credit_10401[1:4,][7][[1]])
+# paste0(as.character(credit_10401[1:4,][7][[1]]))
 # as.character(credit_10401[4,])
 # colnames(credit_10401) <- as.character(credit_10401[4,])
-credit_10401 <- credit_10401[8:45,]
+# credit_10401 <- credit_10401[8:45,]
 # 放 View 的 table 截圖
-# View(credit_10401)
-str(credit_10401)
 credit_10401_2 <- credit_10401
 credit_10401_2[-1] <- lapply(credit_10401[-1], as.character)
 credit_10401_2[-1] <- lapply(credit_10401_2[-1], as.numeric)
@@ -286,8 +283,9 @@ sheetNames <- excel_sheets(filename)
 resxl <- read_excel(filename, sheet = sheetNames[1], col_names = TRUE, skip = 4)
 resxl <- resxl[4:41,]
 resxl[-1] <- lapply(resxl[-1], as.numeric)
+# colnames(resxl)=iconv(colnames(resxl),'utf8','big5')
 str(resxl)
-barplot(height = resxl$流通卡數, names.arg = resxl$金融機構名稱)
+# barplot(height = resxl$流通卡數, names.arg = resxl$金融機構名稱)
 # View(resxl)
 resxl_2 <- read_excel("~/Downloads/29010.xls", sheet = 2, col_names = FALSE)
 # View(resxl_2)
