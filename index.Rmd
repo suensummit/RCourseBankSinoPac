@@ -36,6 +36,8 @@ Sys.setenv("JAVA_HOME"="path/where/java/installed")
 
 <<<<<截圖>>>>>
 
+<!-- end of list -->
+
 ---
 
 ### 練習操作：R Basic Recap
@@ -90,9 +92,13 @@ nrow(iris)
 ### 今天會用到的套件／重要函式：
 
 - `readLine` | `read.table`
+
 - `readxl` | `xlsx` | `XLConnect` | `iconv`
+
 - `magrittr`
+
 - `dplyr` | `reshape2`
+
 - `RSQLite` | `DBI`
 
 <!-- end of list -->
@@ -145,6 +151,8 @@ data_table
 
 - 作業：無
 
+<!-- end of list -->
+
 ---
 
 ## 基本資料讀寫
@@ -170,29 +178,70 @@ head(Cl_info)
 
 - 作業：無
 
+<!-- end of list -->
+
 ---
 
 ## 處理 Excel 資料
 
 ### Excel 不等於 Table!
 
+### - `gdata`
+
+[在 Windows 系統中需要另外安裝 Perl](https://cran.r-project.org/web/packages/gdata/INSTALL)
+
 ```{r}
 ## Need Perl on Windows
 library(gdata)
+```
 
+### - `XLConnect` and `xlsx`
+
+需要 `rJava`，處理中文編碼需要使用 `iconv` 輔助。
+
+```{r}
 ## Need Java/rJava
 library(XLConnect)
 library(xlsx)
+```
 
+### - `readxl`
+
+Made by Hadley 品質保證，powerd by `RCpp`
+
+```{r}
 ##
 library(readxl)
 ```
+
+<!-- end of list -->
 
 ---
 
 ## 觀察
 
 首先，觀察檔案的格式、欄位、資料型態
+
+### 利用 `readLines`，先把前幾行資料讀進來觀察
+
+```{r}
+filename <- "~/Downloads/29010.xls"
+raw <- readLines(filename, n = 10, encoding = "BIG-5")
+iconv(raw[1], from = "BIG-5", to = "UTF-8")
+```
+
+### 預先設定欄位的大小及資料型態 `colClasses`，讓讀檔速度加快（執行時不用去猜資料的大小、格式與資料型態）
+
+```{r, eval=FALSE}
+ubike = read.csv('檔案路徑', 
+          colClasses = c("factor","integer","integer","factor","factor",
+                         "numeric","numeric","integer","numeric","integer",
+                         "integer","numeric","numeric", "integer","integer",
+                         "numeric","numeric","numeric", "numeric","numeric",
+                         "numeric"),fileEncoding = 'utf8')
+```
+
+### 一般來說，使用 `XLConnect::existsSheet` 取得 Excel 檔案的表單資訊（sheet），再用 `xlsx::read.xlsx2` 讀檔（較快）
 
 ```{r}
 library(xlsx)
@@ -253,6 +302,10 @@ str(resxl_2)
 
 ### 簡介 `dplyr`
 
+```{r}
+library(dplyr)
+```
+
 ### 延伸 `data.table`
 
 ### 延伸 `rlist`
@@ -261,7 +314,7 @@ str(resxl_2)
 
 ## R 與 Database 的串接：以 SQLite 為例
 
-http://mlr.cs.umass.edu/ml/datasets/Bank+Marketing#
+[範例資料](http://mlr.cs.umass.edu/ml/datasets/Bank+Marketing)
 
 [Download Sample file](http://mlr.cs.umass.edu/ml/machine-learning-databases/00222/bank.zip)
 

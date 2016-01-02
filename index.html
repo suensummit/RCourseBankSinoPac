@@ -87,8 +87,15 @@ img {
 <li><a>基本資料讀寫</a></li>
 <li><a href="#-excel-">處理 Excel 資料</a><ul>
 <li><a href="#excel--table">Excel 不等於 Table!</a></li>
+<li><a href="#gdata">- <code>gdata</code></a></li>
+<li><a href="#xlconnect-and-xlsx">- <code>XLConnect</code> and <code>xlsx</code></a></li>
+<li><a href="#readxl">- <code>readxl</code></a></li>
 </ul></li>
-<li><a>觀察</a></li>
+<li><a>觀察</a><ul>
+<li><a href="#-readlines">利用 <code>readLines</code>，先把前幾行資料讀進來觀察</a></li>
+<li><a href="#-colclasses">預先設定欄位的大小及資料型態 <code>colClasses</code>，讓讀檔速度加快（執行時不用去猜資料的大小、格式與資料型態）</a></li>
+<li><a href="#-xlconnectexistssheet--excel-sheet-xlsxread.xlsx2-">一般來說，使用 <code>XLConnect::existsSheet</code> 取得 Excel 檔案的表單資訊（sheet），再用 <code>xlsx::read.xlsx2</code> 讀檔（較快）</a></li>
+</ul></li>
 <li><a href="#dplyr">dplyr</a><ul>
 <li><a href="#-dplyr">簡介 <code>dplyr</code></a></li>
 <li><a href="#-data.table">延伸 <code>data.table</code></a></li>
@@ -120,6 +127,7 @@ img {
 <pre class="r"><code>Sys.getenv(&quot;JAVA_HOME&quot;)
 Sys.setenv(&quot;JAVA_HOME&quot;=&quot;path/where/java/installed&quot;)</code></pre>
 <p>&lt;&lt;&lt;&lt;<截圖>&gt;&gt;&gt;&gt;</p>
+<!-- end of list -->
 <hr />
 </div>
 <div id="r-basic-recap" class="section level3">
@@ -231,11 +239,11 @@ dim(iris)</code></pre>
 <div class="section level3">
 <h3>今天會用到的套件／重要函式：</h3>
 <ul>
-<li><code>readLine</code> | <code>read.table</code></li>
-<li><code>readxl</code> | <code>xlsx</code> | <code>XLConnect</code> | <code>iconv</code></li>
-<li><code>magrittr</code></li>
-<li><code>dplyr</code> | <code>reshape2</code></li>
-<li><code>RSQLite</code> | <code>DBI</code></li>
+<li><p><code>readLine</code> | <code>read.table</code></p></li>
+<li><p><code>readxl</code> | <code>xlsx</code> | <code>XLConnect</code> | <code>iconv</code></p></li>
+<li><p><code>magrittr</code></p></li>
+<li><p><code>dplyr</code> | <code>reshape2</code></p></li>
+<li><p><code>RSQLite</code> | <code>DBI</code></p></li>
 </ul>
 <!-- end of list -->
 <p>&lt;&lt;&lt;&lt;<嘴砲>&gt;&gt;&gt;&gt;</p>
@@ -292,6 +300,7 @@ data_table</code></pre>
 <li><p>練習：Yahoo Stock</p></li>
 <li><p>作業：無</p></li>
 </ul>
+<!-- end of list -->
 <hr />
 </div>
 <div class="section level2">
@@ -340,12 +349,17 @@ head(Cl_info)</code></pre>
 <li><p>練習：</p></li>
 <li><p>作業：無</p></li>
 </ul>
+<!-- end of list -->
 <hr />
 </div>
 <div id="-excel-" class="section level2">
 <h2>處理 Excel 資料</h2>
 <div id="excel--table" class="section level3">
 <h3>Excel 不等於 Table!</h3>
+</div>
+<div id="gdata" class="section level3">
+<h3>- <code>gdata</code></h3>
+<p><a href="https://cran.r-project.org/web/packages/gdata/INSTALL">在 Windows 系統中需要另外安裝 Perl</a></p>
 <pre class="r"><code>## Need Perl on Windows
 library(gdata)</code></pre>
 <pre><code>## gdata: read.xls support for 'XLS' (Excel 97-2004) files ENABLED.
@@ -361,6 +375,10 @@ library(gdata)</code></pre>
 ## The following object is masked from 'package:utils':
 ## 
 ##     object.size</code></pre>
+</div>
+<div id="xlconnect-and-xlsx" class="section level3">
+<h3>- <code>XLConnect</code> and <code>xlsx</code></h3>
+<p>需要 <code>rJava</code>，處理中文編碼需要使用 <code>iconv</code> 輔助。</p>
 <pre class="r"><code>## Need Java/rJava
 library(XLConnect)</code></pre>
 <pre><code>## Loading required package: XLConnectJars
@@ -389,14 +407,57 @@ library(XLConnect)</code></pre>
 ##     createFreezePane, createSheet, createSplitPane, getCellStyle,
 ##     getSheets, loadWorkbook, removeSheet, saveWorkbook,
 ##     setCellStyle, setColumnWidth, setRowHeight</code></pre>
+</div>
+<div id="readxl" class="section level3">
+<h3>- <code>readxl</code></h3>
+<p>Made by Hadley 品質保證，powerd by <code>RCpp</code></p>
 <pre class="r"><code>##
 library(readxl)</code></pre>
+<!-- end of list -->
 <hr />
 </div>
 </div>
 <div class="section level2">
 <h2>觀察</h2>
 <p>首先，觀察檔案的格式、欄位、資料型態</p>
+<div id="-readlines" class="section level3">
+<h3>利用 <code>readLines</code>，先把前幾行資料讀進來觀察</h3>
+<pre class="r"><code>filename &lt;- &quot;~/Downloads/29010.xls&quot;
+raw &lt;- readLines(filename, n = 10, encoding = &quot;BIG-5&quot;)</code></pre>
+<pre><code>## Warning in readLines(filename, n = 10, encoding = &quot;BIG-5&quot;): line 1 appears
+## to contain an embedded nul</code></pre>
+<pre><code>## Warning in readLines(filename, n = 10, encoding = &quot;BIG-5&quot;): line 2 appears
+## to contain an embedded nul</code></pre>
+<pre><code>## Warning in readLines(filename, n = 10, encoding = &quot;BIG-5&quot;): line 3 appears
+## to contain an embedded nul</code></pre>
+<pre><code>## Warning in readLines(filename, n = 10, encoding = &quot;BIG-5&quot;): line 4 appears
+## to contain an embedded nul</code></pre>
+<pre><code>## Warning in readLines(filename, n = 10, encoding = &quot;BIG-5&quot;): line 5 appears
+## to contain an embedded nul</code></pre>
+<pre><code>## Warning in readLines(filename, n = 10, encoding = &quot;BIG-5&quot;): line 6 appears
+## to contain an embedded nul</code></pre>
+<pre><code>## Warning in readLines(filename, n = 10, encoding = &quot;BIG-5&quot;): line 7 appears
+## to contain an embedded nul</code></pre>
+<pre><code>## Warning in readLines(filename, n = 10, encoding = &quot;BIG-5&quot;): line 8 appears
+## to contain an embedded nul</code></pre>
+<pre><code>## Warning in readLines(filename, n = 10, encoding = &quot;BIG-5&quot;): line 9 appears
+## to contain an embedded nul</code></pre>
+<pre><code>## Warning in readLines(filename, n = 10, encoding = &quot;BIG-5&quot;): line 10 appears
+## to contain an embedded nul</code></pre>
+<pre class="r"><code>iconv(raw[1], from = &quot;BIG-5&quot;, to = &quot;UTF-8&quot;)</code></pre>
+<pre><code>## [1] NA</code></pre>
+</div>
+<div id="-colclasses" class="section level3">
+<h3>預先設定欄位的大小及資料型態 <code>colClasses</code>，讓讀檔速度加快（執行時不用去猜資料的大小、格式與資料型態）</h3>
+<pre class="r"><code>ubike = read.csv('檔案路徑', 
+          colClasses = c(&quot;factor&quot;,&quot;integer&quot;,&quot;integer&quot;,&quot;factor&quot;,&quot;factor&quot;,
+                         &quot;numeric&quot;,&quot;numeric&quot;,&quot;integer&quot;,&quot;numeric&quot;,&quot;integer&quot;,
+                         &quot;integer&quot;,&quot;numeric&quot;,&quot;numeric&quot;, &quot;integer&quot;,&quot;integer&quot;,
+                         &quot;numeric&quot;,&quot;numeric&quot;,&quot;numeric&quot;, &quot;numeric&quot;,&quot;numeric&quot;,
+                         &quot;numeric&quot;),fileEncoding = 'utf8')</code></pre>
+</div>
+<div id="-xlconnectexistssheet--excel-sheet-xlsxread.xlsx2-" class="section level3">
+<h3>一般來說，使用 <code>XLConnect::existsSheet</code> 取得 Excel 檔案的表單資訊（sheet），再用 <code>xlsx::read.xlsx2</code> 讀檔（較快）</h3>
 <pre class="r"><code>library(xlsx)
 library(magrittr)
 credit_10401 &lt;- read.xlsx2(&quot;~/Downloads/10401信用卡重要資訊揭露.xlsx&quot;, sheetIndex = 1, startRow = 8, endRow = 45, as.data.frame = TRUE)
@@ -613,11 +674,27 @@ str(resxl_2)</code></pre>
 ##  $ X15: chr  NA NA &quot;單位：新臺幣百萬元 NT$ Million&quot; &quot;收單&quot; ...</code></pre>
 <hr />
 </div>
+</div>
 <div id="dplyr" class="section level2">
 <h2>dplyr</h2>
 <p>接下來，真正開始用 R 來做 ETL 資料清理的工作。</p>
 <div id="-dplyr" class="section level3">
 <h3>簡介 <code>dplyr</code></h3>
+<pre class="r"><code>library(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: 'dplyr'
+## 
+## The following objects are masked from 'package:gdata':
+## 
+##     combine, first, last
+## 
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+## 
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union</code></pre>
 </div>
 <div id="-data.table" class="section level3">
 <h3>延伸 <code>data.table</code></h3>
@@ -629,7 +706,7 @@ str(resxl_2)</code></pre>
 </div>
 <div id="r--database--sqlite-" class="section level2">
 <h2>R 與 Database 的串接：以 SQLite 為例</h2>
-<p><a href="http://mlr.cs.umass.edu/ml/datasets/Bank+Marketing" class="uri">http://mlr.cs.umass.edu/ml/datasets/Bank+Marketing</a>#</p>
+<p><a href="http://mlr.cs.umass.edu/ml/datasets/Bank+Marketing">範例資料</a></p>
 <p><a href="http://mlr.cs.umass.edu/ml/machine-learning-databases/00222/bank.zip">Download Sample file</a></p>
 <pre class="r"><code>res &lt;- read.csv(&quot;bank/bank-full.csv&quot;, header = TRUE, sep = &quot;;&quot;)</code></pre>
 <pre class="r"><code>library(DBI)
