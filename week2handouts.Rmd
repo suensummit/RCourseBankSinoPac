@@ -152,6 +152,16 @@ data_table
 
 塞進資料庫／檔案做儲存
 
+```{r}
+head(data_table)
+colnames(data_table) <- c("券商", "買進", "賣出", "差距", "券商", "買進", "賣出", "差距")
+stockMajor <- rbind(data_table[,1:4], data_table[,5:8])
+# stockMajor <- cbind(日期 = c(Sys.Date()), 股票代號 = c("2451"), 股票名稱 = c("創見"), stockMajor)
+stockMajor <- cbind(日期 = as.POSIXct(c("2015-12-31")), 股票代號 = c("2451"), 股票名稱 = c("創見"), stockMajor)
+# View(stockMajor)
+head(stockMajor)
+```
+
 - 範例：Yahoo Stock
 
 - 練習：Yahoo Stock
@@ -274,9 +284,25 @@ str(resxl)
 
 ### 簡介 `dplyr`
 
+- 讓 R 使用者可以用更有彈性的方式來處理資料
+
+- 針對 data.frame 做設計（名稱中的 d）
+
+- 設計理念
+    + 導入資料整理最重要的操作（非常類似 SQL）
+    + 快速與方便
+    + 支援異質資料源（data.frame 或資料庫中的表格）
+
+<!-- end of list -->
+
 ```{r}
 # library(dplyr)
-ls()
+```
+
+回頭來看 Yahoo Stock 的資料
+
+```{r}
+
 ```
 
 ---
@@ -332,3 +358,5 @@ dbDisconnect(con)
 ---
 
 ## Q & A
+
+[四周課程列表](./index.html)

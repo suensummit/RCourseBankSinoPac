@@ -334,6 +334,27 @@ data_table</code></pre>
 <p>左右兩欄的表格應該整併成同一欄</p>
 <p>並且加入時間欄位</p>
 <p>塞進資料庫／檔案做儲存</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(data_table)</code></pre>
+<pre><code>##     買超券商 買進 賣出 買超   賣超券商 買進 賣出 賣超
+## 1   美商高盛    8    0    8   群益金鼎    1   16  -15
+## 2 港商德意志   11    3    8 香港上海匯    0   11  -11
+## 3 港商麥格里    7    0    7   凱基證券    5   16  -11
+## 4       臺銀    7    0    7   鑫豐證券    0    8   -8
+## 5 台灣東方匯    5    0    5       元富    0    5   -5
+## 6   元大證券   23   18    5 永豐金證券    2    7   -5</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">colnames</span>(data_table) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;券商&quot;</span>, <span class="st">&quot;買進&quot;</span>, <span class="st">&quot;賣出&quot;</span>, <span class="st">&quot;差距&quot;</span>, <span class="st">&quot;券商&quot;</span>, <span class="st">&quot;買進&quot;</span>, <span class="st">&quot;賣出&quot;</span>, <span class="st">&quot;差距&quot;</span>)
+stockMajor &lt;-<span class="st"> </span><span class="kw">rbind</span>(data_table[,<span class="dv">1</span>:<span class="dv">4</span>], data_table[,<span class="dv">5</span>:<span class="dv">8</span>])
+<span class="co"># stockMajor &lt;- cbind(日期 = c(Sys.Date()), 股票代號 = c(&quot;2451&quot;), 股票名稱 = c(&quot;創見&quot;), stockMajor)</span>
+stockMajor &lt;-<span class="st"> </span><span class="kw">cbind</span>(日期 =<span class="st"> </span><span class="kw">as.POSIXct</span>(<span class="kw">c</span>(<span class="st">&quot;2015-12-31&quot;</span>)), 股票代號 =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;2451&quot;</span>), 股票名稱 =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;創見&quot;</span>), stockMajor)
+<span class="co"># View(stockMajor)</span>
+<span class="kw">head</span>(stockMajor)</code></pre>
+<pre><code>##         日期 股票代號 股票名稱       券商 買進 賣出 差距
+## 1 2015-12-31     2451     創見   美商高盛    8    0    8
+## 2 2015-12-31     2451     創見 港商德意志   11    3    8
+## 3 2015-12-31     2451     創見 港商麥格里    7    0    7
+## 4 2015-12-31     2451     創見       臺銀    7    0    7
+## 5 2015-12-31     2451     創見 台灣東方匯    5    0    5
+## 6 2015-12-31     2451     創見   元大證券   23   18    5</code></pre>
 <ul>
 <li><p>範例：Yahoo Stock</p></li>
 <li><p>練習：Yahoo Stock</p></li>
@@ -524,10 +545,19 @@ colTypes</code></pre>
 <p>接下來，真正開始用 R 來做 ETL 資料清理的工作。</p>
 <div id="-dplyr" class="section level3">
 <h3>簡介 <code>dplyr</code></h3>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># library(dplyr)</span>
-<span class="kw">ls</span>()</code></pre>
-<pre><code>## [1] &quot;Cl_info&quot;    &quot;colTypes&quot;   &quot;data_table&quot; &quot;doc_str&quot;    &quot;filename&quot;  
-## [6] &quot;res&quot;        &quot;resxl&quot;      &quot;sheetNames&quot; &quot;Target_URL&quot;</code></pre>
+<ul>
+<li><p>讓 R 使用者可以用更有彈性的方式來處理資料</p></li>
+<li><p>針對 data.frame 做設計（名稱中的 d）</p></li>
+<li>設計理念
+<ul>
+<li>導入資料整理最重要的操作（非常類似 SQL）</li>
+<li>快速與方便</li>
+<li>支援異質資料源（data.frame 或資料庫中的表格）</li>
+</ul></li>
+</ul>
+<!-- end of list -->
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># library(dplyr)</span></code></pre>
+<p>回頭來看 Yahoo Stock 的資料</p>
 <hr />
 </div>
 </div>
@@ -630,6 +660,7 @@ while(!<span class="kw">dbHasCompleted</span>(res)){
 </div>
 <div id="q-a" class="section level2">
 <h2>Q &amp; A</h2>
+<p><a href="./index.html">四周課程列表</a></p>
 </div>
 
 
