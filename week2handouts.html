@@ -84,10 +84,6 @@ img {
 
 <div id="TOC">
 <ul>
-<li><a>暖身</a><ul>
-<li><a href="#rjava-installation">環境設定：rJava Installation</a></li>
-<li><a href="#r-basic-recap">練習操作：R Basic Recap</a></li>
-</ul></li>
 <li><a href="#-etl-etl">今天的題目是 ETL：什麼是 ETL？</a><ul>
 <li><a href="#e-extract">E = Extract</a></li>
 <li><a href="#t-transform">T = Transform</a></li>
@@ -95,10 +91,15 @@ img {
 </ul></li>
 <li><a>今天會用到的套件／重要函式：</a><ul>
 <li><a href="#readline-read.table">- <code>readLine</code> | <code>read.table</code></a></li>
+<li><a href="#xlconnect-xlsx">- <code>XLConnect</code> | <code>xlsx</code></a></li>
 <li><a href="#readxl">- <code>readxl</code></a></li>
 <li><a href="#magrittr">- <code>magrittr</code></a></li>
 <li><a href="#dplyr-reshape2">- <code>dplyr</code> | <code>reshape2</code></a></li>
 <li><a href="#rsqlite">- <code>RSQLite</code></a></li>
+<li><a href="#rjava-installation">環境設定：rJava Installation</a></li>
+</ul></li>
+<li><a>暖身</a><ul>
+<li><a href="#r-basic-recap">練習操作：R Basic Recap</a></li>
 </ul></li>
 <li><a>什麼是資料第二問：資料「應該」長怎樣？</a></li>
 <li><a>基本資料讀寫</a><ul>
@@ -164,25 +165,70 @@ img {
 </div>
 
 <hr />
+<div id="-etl-etl" class="section level1">
+<h1>今天的題目是 ETL：什麼是 ETL？</h1>
+<div id="e-extract" class="section level2">
+<h2>E = Extract</h2>
+</div>
+<div id="t-transform" class="section level2">
+<h2>T = Transform</h2>
+</div>
+<div id="l-load" class="section level2">
+<h2>L = Load</h2>
+</div>
+</div>
 <div class="section level1">
-<h1>暖身</h1>
+<h1>今天會用到的套件／重要函式：</h1>
+<div id="readline-read.table" class="section level2">
+<h2>- <code>readLine</code> | <code>read.table</code></h2>
+</div>
+<div id="xlconnect-xlsx" class="section level2">
+<h2>- <code>XLConnect</code> | <code>xlsx</code></h2>
+</div>
+<div id="readxl" class="section level2">
+<h2>- <code>readxl</code></h2>
+</div>
+<div id="magrittr" class="section level2">
+<h2>- <code>magrittr</code></h2>
+</div>
+<div id="dplyr-reshape2" class="section level2">
+<h2>- <code>dplyr</code> | <code>reshape2</code></h2>
+</div>
+<div id="rsqlite" class="section level2">
+<h2>- <code>RSQLite</code></h2>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(readxl)
+<span class="kw">library</span>(magrittr)
+<span class="kw">library</span>(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: 'dplyr'
+## 
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+## 
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(reshape2)
+<span class="kw">library</span>(RSQLite)</code></pre>
+<pre><code>## Loading required package: DBI</code></pre>
+<!-- end of list -->
+</div>
 <div id="rjava-installation" class="section level2">
 <h2>環境設定：rJava Installation</h2>
 <p>在 Windows 系統裡使用 R，有時候會遇到一些棘手的 error；其中除了跟系統編碼（顯示亂碼）相關的問題以外，有一大宗都跟 <code>rJava</code> 這個套件有關。</p>
 <p>今天先帶領大家操作一次，當遇到問題時，可以如何去解決。</p>
-<ol style="list-style-type: decimal">
+<ul>
 <li>下載 64 bits 版本的 Java（for Windows）<a href="http://javadl.sun.com/webapps/download/AutoDL?BundleId=113219">Download</a></li>
-</ol>
+</ul>
 <p>&lt;&lt;&lt;&lt;<截圖>&gt;&gt;&gt;&gt;</p>
-<ol start="2" style="list-style-type: decimal">
-<li>設定環境變數</li>
-</ol>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Sys.getenv</span>(<span class="st">&quot;JAVA_HOME&quot;</span>)
-<span class="kw">Sys.setenv</span>(<span class="st">&quot;JAVA_HOME&quot;</span>=<span class="st">&quot;path/where/java/installed&quot;</span>)</code></pre>
 <p>&lt;&lt;&lt;&lt;<截圖>&gt;&gt;&gt;&gt;</p>
 <!-- end of list -->
 <hr />
 </div>
+</div>
+<div class="section level1">
+<h1>暖身</h1>
 <div id="r-basic-recap" class="section level2">
 <h2>練習操作：R Basic Recap</h2>
 <p>小提示 Tips</p>
@@ -278,54 +324,6 @@ img {
 <hr />
 </div>
 </div>
-<div id="-etl-etl" class="section level1">
-<h1>今天的題目是 ETL：什麼是 ETL？</h1>
-<div id="e-extract" class="section level2">
-<h2>E = Extract</h2>
-</div>
-<div id="t-transform" class="section level2">
-<h2>T = Transform</h2>
-</div>
-<div id="l-load" class="section level2">
-<h2>L = Load</h2>
-</div>
-</div>
-<div class="section level1">
-<h1>今天會用到的套件／重要函式：</h1>
-<div id="readline-read.table" class="section level2">
-<h2>- <code>readLine</code> | <code>read.table</code></h2>
-</div>
-<div id="readxl" class="section level2">
-<h2>- <code>readxl</code></h2>
-</div>
-<div id="magrittr" class="section level2">
-<h2>- <code>magrittr</code></h2>
-</div>
-<div id="dplyr-reshape2" class="section level2">
-<h2>- <code>dplyr</code> | <code>reshape2</code></h2>
-</div>
-<div id="rsqlite" class="section level2">
-<h2>- <code>RSQLite</code></h2>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(readxl)
-<span class="kw">library</span>(magrittr)
-<span class="kw">library</span>(dplyr)</code></pre>
-<pre><code>## 
-## Attaching package: 'dplyr'
-## 
-## The following objects are masked from 'package:stats':
-## 
-##     filter, lag
-## 
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(reshape2)
-<span class="kw">library</span>(RSQLite)</code></pre>
-<pre><code>## Loading required package: DBI</code></pre>
-<!-- end of list -->
-<hr />
-</div>
-</div>
 <div class="section level1">
 <h1>什麼是資料第二問：資料「應該」長怎樣？</h1>
 <p>Data Schema Matters！</p>
@@ -356,19 +354,19 @@ data_table</code></pre>
 <pre><code>##      買超券商 買進 賣出 買超   賣超券商 買進 賣出 賣超
 ## 1    美商高盛    8    0    8   群益金鼎    1   16  -15
 ## 2  港商德意志   11    3    8 香港上海匯    0   11  -11
-## 3  港商麥格里    7    0    7   凱基證券    5   16  -11
-## 4        臺銀    7    0    7   鑫豐證券    0    8   -8
-## 5  台灣東方匯    5    0    5       元富    0    5   -5
-## 6    元大證券   23   18    5 永豐金證券    2    7   -5
-## 7    瑞士信貸    4    0    4 新加坡商瑞    2    7   -5
-## 8    兆豐證券    5    2    3   國泰證券    0    4   -4
-## 9    台中商銀    3    0    3   日盛證券    0    2   -2
-## 10       永興    2    0    2       統一    1    2   -1
-## 11     第一金    2    0    2   致和證券    1    2   -1
-## 12   宏遠證券    1    0    1       美林    8    9   -1
-## 13   摩根大通    1    0    1 台灣摩根士    3    4   -1
-## 14   大昌證券    1    0    1   合庫證券    1    2   -1
-## 15       彰銀    0    0    0   大慶證券    0    1   -1</code></pre>
+## 3        臺銀    7    0    7   凱基證券    5   16  -11
+## 4  港商麥格里    7    0    7   鑫豐證券    0    8   -8
+## 5    元大證券   23   18    5 永豐金證券    2    7   -5
+## 6  台灣東方匯    5    0    5 新加坡商瑞    2    7   -5
+## 7    瑞士信貸    4    0    4       元富    0    5   -5
+## 8    台中商銀    3    0    3   國泰證券    0    4   -4
+## 9    兆豐證券    5    2    3   日盛證券    0    2   -2
+## 10     第一金    2    0    2   合庫證券    1    2   -1
+## 11       永興    2    0    2   大慶證券    0    1   -1
+## 12   宏遠證券    1    0    1   富邦證券    0    1   -1
+## 13   摩根大通    1    0    1   德信證券    0    1   -1
+## 14   大昌證券    1    0    1   新光證券    0    1   -1
+## 15       土銀    0    0    0   國票證券    0    1   -1</code></pre>
 <p>左右兩欄的表格應該整併成同一欄</p>
 <p>並且加入時間欄位</p>
 <p>塞進資料庫／檔案做儲存</p>
@@ -376,10 +374,10 @@ data_table</code></pre>
 <pre><code>##     買超券商 買進 賣出 買超   賣超券商 買進 賣出 賣超
 ## 1   美商高盛    8    0    8   群益金鼎    1   16  -15
 ## 2 港商德意志   11    3    8 香港上海匯    0   11  -11
-## 3 港商麥格里    7    0    7   凱基證券    5   16  -11
-## 4       臺銀    7    0    7   鑫豐證券    0    8   -8
-## 5 台灣東方匯    5    0    5       元富    0    5   -5
-## 6   元大證券   23   18    5 永豐金證券    2    7   -5</code></pre>
+## 3       臺銀    7    0    7   凱基證券    5   16  -11
+## 4 港商麥格里    7    0    7   鑫豐證券    0    8   -8
+## 5   元大證券   23   18    5 永豐金證券    2    7   -5
+## 6 台灣東方匯    5    0    5 新加坡商瑞    2    7   -5</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">colnames</span>(data_table) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;券商&quot;</span>, <span class="st">&quot;買進&quot;</span>, <span class="st">&quot;賣出&quot;</span>, <span class="st">&quot;差距&quot;</span>, <span class="st">&quot;券商&quot;</span>, <span class="st">&quot;買進&quot;</span>, <span class="st">&quot;賣出&quot;</span>, <span class="st">&quot;差距&quot;</span>)
 stockMajor &lt;-<span class="st"> </span><span class="kw">rbind</span>(data_table[,<span class="dv">1</span>:<span class="dv">4</span>], data_table[,<span class="dv">5</span>:<span class="dv">8</span>])
 <span class="co"># stockMajor &lt;- cbind(日期 = c(Sys.Date()), 股票代號 = c(&quot;2451&quot;), 股票名稱 = c(&quot;創見&quot;), stockMajor)</span>
@@ -389,10 +387,10 @@ stockMajor &lt;-<span class="st"> </span><span class="kw">cbind</span>(日期 =<
 <pre><code>##         日期 股票代號 股票名稱       券商 買進 賣出 差距
 ## 1 2015-12-31     2451     創見   美商高盛    8    0    8
 ## 2 2015-12-31     2451     創見 港商德意志   11    3    8
-## 3 2015-12-31     2451     創見 港商麥格里    7    0    7
-## 4 2015-12-31     2451     創見       臺銀    7    0    7
-## 5 2015-12-31     2451     創見 台灣東方匯    5    0    5
-## 6 2015-12-31     2451     創見   元大證券   23   18    5</code></pre>
+## 3 2015-12-31     2451     創見       臺銀    7    0    7
+## 4 2015-12-31     2451     創見 港商麥格里    7    0    7
+## 5 2015-12-31     2451     創見   元大證券   23   18    5
+## 6 2015-12-31     2451     創見 台灣東方匯    5    0    5</code></pre>
 <ul>
 <li><p>範例：Yahoo Stock</p></li>
 <li><p>練習：Yahoo Stock</p></li>
@@ -611,7 +609,6 @@ creditData &lt;-<span class="st"> </span><span class="kw">do.call</span>(<span c
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># library(dplyr)</span>
 <span class="kw">vignette</span>(<span class="dt">all =</span> <span class="ot">TRUE</span>, <span class="dt">package =</span> <span class="st">&quot;dplyr&quot;</span>)
 <span class="kw">vignette</span>(<span class="st">&quot;introduction&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;dplyr&quot;</span>)</code></pre>
-<pre><code>## starting httpd help server ... done</code></pre>
 <div id="-r-" class="section level3">
 <h3>- 讓 R 使用者可以用更有彈性的方式來處理資料</h3>
 </div>

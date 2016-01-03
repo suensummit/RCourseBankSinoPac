@@ -16,7 +16,37 @@ output:
 ---
 ---
 
-# 暖身
+# 今天的題目是 ETL：什麼是 ETL？
+
+## E = Extract
+
+## T = Transform
+
+## L = Load
+
+# 今天會用到的套件／重要函式：
+
+## - `readLine` | `read.table`
+
+## - `XLConnect` | `xlsx`
+
+## - `readxl`
+
+## - `magrittr`
+
+## - `dplyr` | `reshape2`
+
+## - `RSQLite`
+
+```{r}
+library(readxl)
+library(magrittr)
+library(dplyr)
+library(reshape2)
+library(RSQLite)
+```
+
+<!-- end of list -->
 
 ## 環境設定：rJava Installation
 
@@ -24,22 +54,17 @@ output:
 
 今天先帶領大家操作一次，當遇到問題時，可以如何去解決。
 
-1. 下載 64 bits 版本的 Java（for Windows）[Download](http://javadl.sun.com/webapps/download/AutoDL?BundleId=113219)
+- 下載 64 bits 版本的 Java（for Windows）[Download](http://javadl.sun.com/webapps/download/AutoDL?BundleId=113219)
 
 <<<<<截圖>>>>>
-
-2. 設定環境變數
-
-```{r, eval=FALSE}
-Sys.getenv("JAVA_HOME")
-Sys.setenv("JAVA_HOME"="path/where/java/installed")
-```
 
 <<<<<截圖>>>>>
 
 <!-- end of list -->
 
 ---
+
+# 暖身
 
 ## 練習操作：R Basic Recap
 
@@ -79,38 +104,6 @@ dim(iris)
 ncol(iris)
 nrow(iris)
 ```
-
----
-
-# 今天的題目是 ETL：什麼是 ETL？
-
-## E = Extract
-
-## T = Transform
-
-## L = Load
-
-# 今天會用到的套件／重要函式：
-
-## - `readLine` | `read.table`
-
-## - `readxl`
-
-## - `magrittr`
-
-## - `dplyr` | `reshape2`
-
-## - `RSQLite`
-
-```{r}
-library(readxl)
-library(magrittr)
-library(dplyr)
-library(reshape2)
-library(RSQLite)
-```
-
-<!-- end of list -->
 
 ---
 
