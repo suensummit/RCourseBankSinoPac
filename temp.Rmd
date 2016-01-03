@@ -239,7 +239,7 @@ library(magrittr)
 filename <- "data/29010.xls"
 filename <- "data/10401信用卡重要資訊揭露.xlsx"
 credit_rownames <- read.xlsx2(filename, sheetIndex = 1, startRow = 4, endRow = 8, as.data.frame = TRUE, header = FALSE, colClasses = c("character", "character", "character", "character"))
-credit_10401 <- read.xlsx2(filename, sheetIndex = 1, startRow = 9, endRow = 45, as.data.frame = TRUE, header = FALSE, colClasses = c("text", "integer", "integer", "integer", "integer", "integer", "integer", "integer", "integer", "numeric", "numeric", "numeric", "integer", "integer"))
+credit_10401 <- read.xlsx2(filename, sheetIndex = 1, startRow = 9, endRow = 45, as.data.frame = TRUE, header = FALSE, colClasses = c("character", "integer", "integer", "integer", "integer", "integer", "integer", "integer", "integer", "numeric", "numeric", "numeric", "integer", "integer"))
 # 放 View 的 table 截圖
 # View(credit_10401)
 str(credit_10401)

@@ -180,7 +180,8 @@ head(stockMajor)
 ## 利用 `readLines`，先把前幾筆資料讀進來觀察
 
 ```{r}
-res <- readLines(con = "data/cl_info_other.csv", n = 10L, encoding = "BIG-5")
+res <- readLines(con = "data/cl_info_other.csv", n = 10L, encoding = "UTF-8")
+iconv(res,from='utf8',to='big5')
 head(res)
 ```
 
@@ -194,7 +195,7 @@ head(res)
 # library(RCurl)
 # Cl_info = read.table(sep=",", header=TRUE, stringsAsFactors=F, file=textConnection(getURL("https://raw.githubusercontent.com/suensummit/RCourseBankSinoPac/gh-pages/data/cl_info_other.csv")))
 
-Cl_info = read.table(file = "data/cl_info_other.csv", sep = ",", stringsAsFactors = F, header = T, colClasses = c("character", "integer", "Date", "character", "Date", "character", "integer", "numeric", "integer", "numeric", "integer", "numeric", "integer", "numeric", "integer", "numeric"))
+Cl_info = read.table(file = "data/cl_info_other.csv", sep = ",", stringsAsFactors = F, header = T, colClasses = c("character", "integer", "Date", "character", "Date", "character", "integer", "numeric", "integer", "numeric", "integer", "numeric", "integer", "numeric", "integer", "numeric"), encoding = "UTF-8")
 head(Cl_info)
 str(Cl_info)
 ```
@@ -320,7 +321,7 @@ setwd("../")
 官方的學習文件：`vignette`
 
 ```{r, eval=FALSE}
-# library(dplyr)
+library(dplyr)
 vignette(all = TRUE, package = "dplyr")
 vignette("introduction", package = "dplyr")
 ```
