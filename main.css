@@ -1,7 +1,15 @@
 body {
-  background-color: rgba(200, 200, 200, 0.6);
+  background-color: rgba(4, 99, 128, 0.8);
 }
 
 .main-container {
-  background-color: rgba(255, 255, 255, 1);
+  background-color: rgba(239, 236, 202, 1);
+}
+
+#header {
+  
+}
+
+#TOC {
+  background-color: rgba(230, 226, 175, 0.5);
 }

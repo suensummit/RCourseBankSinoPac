@@ -1,6 +1,6 @@
 ---
-title: "R ETL Crash Course"
-subtitle: Week 2
+title: "第二堂：Ｒ語言資料清理"
+subtitle: 永豐銀行Ｒ語言課程
 author:
     name: "Summit Suen"
     affiliation: 木刻思股份有限公司
@@ -10,6 +10,7 @@ date: "January 04, 2016"
 output: 
   html_document:
     toc: true
+    toc_depth: 2
     theme: readable
     highlight: espresso
     css: main.css
