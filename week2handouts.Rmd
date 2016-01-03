@@ -32,9 +32,7 @@ output:
 
 ## - `readxl`
 
-## - `magrittr`
-
-## - `dplyr` | `reshape2`
+## - `magrittr` | `dplyr`
 
 ## - `RSQLite`
 
@@ -42,7 +40,6 @@ output:
 library(readxl)
 library(magrittr)
 library(dplyr)
-library(reshape2)
 library(RSQLite)
 ```
 
