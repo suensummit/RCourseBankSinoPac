@@ -180,7 +180,7 @@ head(stockMajor)
 ## 利用 `readLines`，先把前幾筆資料讀進來觀察
 
 ```{r}
-res <- readLines(con = "data/cl_info_other.csv", n = 10L, encoding = "UTF-8")
+res <- readLines(con = "data/cl_info_other.csv", n = 10L, encoding = "BIG-5")
 iconv(res,from='utf8',to='big5')
 head(res)
 ```
@@ -195,10 +195,16 @@ head(res)
 # library(RCurl)
 # Cl_info = read.table(sep=",", header=TRUE, stringsAsFactors=F, file=textConnection(getURL("https://raw.githubusercontent.com/suensummit/RCourseBankSinoPac/gh-pages/data/cl_info_other.csv")))
 
-Cl_info = read.table(file = "data/cl_info_other.csv", sep = ",", stringsAsFactors = F, header = T, colClasses = c("character", "integer", "Date", "character", "Date", "character", "integer", "numeric", "integer", "numeric", "integer", "numeric", "integer", "numeric", "integer", "numeric"), encoding = "UTF-8")
+Cl_info = read.table(file = "data/cl_info_other.csv", sep = ",", stringsAsFactors = F, header = T, colClasses = c("character", "character", "character", "character", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric"), encoding = "BIG-5")
 head(Cl_info)
 str(Cl_info)
 ```
+
+### - 輸出形態為Data Frame
+### - file 就是指讀入的檔案路徑
+### - sep 指的是欄位分割用的符號,通常csv檔案格式是透過,做分割
+### - stringsAsFactors 預設是True, 讓讀入的字串用Factor儲存，那麼資料就會轉為整數儲存與對照表
+### - header 預設是False，表示第一行是不是表格標頭，輸出的dataframe欄位名的colnames
 
 ## 使用 `write.table` 寫資料
 

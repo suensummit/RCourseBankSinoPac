@@ -374,13 +374,24 @@ stockMajor &lt;-<span class="st"> </span><span class="kw">cbind</span>(日期 =<
 <div id="-readlines" class="section level2">
 <h2>利用 <code>readLines</code>，先把前幾筆資料讀進來觀察</h2>
 <pre class="sourceCode r"><code class="sourceCode r">res &lt;-<span class="st"> </span><span class="kw">readLines</span>(<span class="dt">con =</span> <span class="st">&quot;data/cl_info_other.csv&quot;</span>, <span class="dt">n =</span> 10L, <span class="dt">encoding =</span> <span class="st">&quot;BIG-5&quot;</span>)
-<span class="kw">head</span>(res)</code></pre>
-<pre><code>## [1] &quot;,X,etl_dt,bank_code,data_dt,bank_nm,mortgage_cnt,mortgage_bal,decorator_hse_cnt,decorator_hse_bal,ln_car_cnt,ln_car_bal,ln_worker_cnt,ln_worker_bal,other_cl_cnt,other_cl_bal&quot;
-## [2] &quot;1,1,2013-11-26 22:30:07.971327,020       ,2006-01-01 00:00:00,日商瑞穗實業銀行,0,0,0,0,0,0,0,0,0,0&quot;                                                                           
-## [3] &quot;2,2,2013-11-26 22:30:07.974241,N000      ,2006-01-01 00:00:00,台北縣淡水第一信用合作社,9924,1.6873e+10,173,1.83e+08,2,1e+06,953,3.72e+08,1101,3.09e+08&quot;                       
-## [4] &quot;3,3,2013-11-26 22:30:07.979319,809       ,2006-01-01 00:00:00,萬泰商業銀行,4051,5.624e+09,1329,1.471e+09,3128,9.26e+08,0,0,1697098,7.6111e+10&quot;                                
-## [5] &quot;4,4,2013-11-26 22:30:07.995118,146       ,2006-01-01 00:00:00,台中市第二信用合作社,11167,1.8949e+10,118,9.7e+07,11,0,0,0,1027,3.99e+08&quot;                                       
-## [6] &quot;5,5,2013-11-26 22:30:08.015108,115       ,2006-01-01 00:00:00,基隆市第二信用合作社,1551,3.773e+09,336,4.7e+08,178,4.7e+07,0,0,2295,5.15e+08&quot;</code></pre>
+<span class="kw">iconv</span>(res,<span class="dt">from=</span><span class="st">'utf8'</span>,<span class="dt">to=</span><span class="st">'big5'</span>)</code></pre>
+<pre><code>##  [1] &quot;etl_dt,bank_code,data_dt,bank_nm,mortgage_cnt,mortgage_bal,decorator_hse_cnt,decorator_hse_bal,ln_car_cnt,ln_car_bal,ln_worker_cnt,ln_worker_bal,other_cl_cnt,other_cl_bal&quot;                                       
+##  [2] &quot;2013-11-26 22:30:07.971327,020       ,2006-01-01 00:00:00,\xa4\xe9\xb0\u04f7\xe7\xc1J\xb9\xea\xb7~\xbbȦ\xe6,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0&quot;                                                              
+##  [3] &quot;2013-11-26 22:30:07.974241,N000      ,2006-01-01 00:00:00,\xa5x\xa5_\xbf\xa4\xb2H\xa4\xf4\xb2Ĥ@\xabH\xa5ΦX\xa7@\xaa\xc0,9924.0,16873000000.0,173.0,183000000.0,2.0,1000000.0,953.0,372000000.0,1101.0,309000000.0&quot;
+##  [4] &quot;2013-11-26 22:30:07.979319,809       ,2006-01-01 00:00:00,\xb8U\xae\xf5\xb0\u04f7~\xbbȦ\xe6,4051.0,5624000000.0,1329.0,1471000000.0,3128.0,926000000.0,0.0,0.0,1697098.0,76111000000.0&quot;                           
+##  [5] &quot;2013-11-26 22:30:07.995118,146       ,2006-01-01 00:00:00,\xa5x\xa4\xa4\xa5\xab\xb2ĤG\xabH\xa5ΦX\xa7@\xaa\xc0,11167.0,18949000000.0,118.0,97000000.0,11.0,0.0,0.0,0.0,1027.0,399000000.0&quot;                         
+##  [6] &quot;2013-11-26 22:30:08.015108,115       ,2006-01-01 00:00:00,\xb0\U000b6a65\xab\xb2ĤG\xabH\xa5ΦX\xa7@\xaa\xc0,1551.0,3773000000.0,336.0,470000000.0,178.0,47000000.0,0.0,0.0,2295.0,515000000.0&quot;                     
+##  [7] &quot;2013-11-26 22:30:08.052642,N005      ,2006-01-01 00:00:00,\xb0\xaa\xb6\xaf\xb2ĤT\xabH\xa5ΦX\xa7@\xaa\xc0,1903.0,2476000000.0,7828.0,11257000000.0,0.0,0.0,984.0,580000000.0,2866.0,946000000.0&quot;                   
+##  [8] &quot;2013-11-26 22:30:08.229513,803       ,2006-01-01 00:00:00,\xc1p\xa8\xb9\xb0\u04f7~\xbbȦ\xe6,35924.0,64191000000.0,11682.0,21458000000.0,49817.0,15844000000.0,277.0,61000000.0,377762.0,13496000000.0&quot;            
+##  [9] &quot;2013-11-26 22:30:08.231682,114       ,2006-01-01 00:00:00,\xb0\U000b6a65\xab\xb2Ĥ@\xabH\xa5ΦX\xa7@\xaa\xc0,5351.0,7501000000.0,1192.0,881000000.0,0.0,0.0,0.0,0.0,5281.0,2681000000.0&quot;                            
+## [10] &quot;2013-11-26 22:30:08.056627,222       ,2006-01-01 00:00:00,\xbc\xea\xb4\U000bf932Ĥ@\xabH\xa5ΦX\xa7@\xaa\xc0,62.0,144000000.0,22.0,39000000.0,0.0,0.0,0.0,0.0,172.0,79000000.0&quot;</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(res)</code></pre>
+<pre><code>## [1] &quot;etl_dt,bank_code,data_dt,bank_nm,mortgage_cnt,mortgage_bal,decorator_hse_cnt,decorator_hse_bal,ln_car_cnt,ln_car_bal,ln_worker_cnt,ln_worker_bal,other_cl_cnt,other_cl_bal&quot;  
+## [2] &quot;2013-11-26 22:30:07.971327,020       ,2006-01-01 00:00:00,日商瑞穗實業銀行,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0&quot;                                                          
+## [3] &quot;2013-11-26 22:30:07.974241,N000      ,2006-01-01 00:00:00,台北縣淡水第一信用合作社,9924.0,16873000000.0,173.0,183000000.0,2.0,1000000.0,953.0,372000000.0,1101.0,309000000.0&quot;
+## [4] &quot;2013-11-26 22:30:07.979319,809       ,2006-01-01 00:00:00,萬泰商業銀行,4051.0,5624000000.0,1329.0,1471000000.0,3128.0,926000000.0,0.0,0.0,1697098.0,76111000000.0&quot;           
+## [5] &quot;2013-11-26 22:30:07.995118,146       ,2006-01-01 00:00:00,台中市第二信用合作社,11167.0,18949000000.0,118.0,97000000.0,11.0,0.0,0.0,0.0,1027.0,399000000.0&quot;                   
+## [6] &quot;2013-11-26 22:30:08.015108,115       ,2006-01-01 00:00:00,基隆市第二信用合作社,1551.0,3773000000.0,336.0,470000000.0,178.0,47000000.0,0.0,0.0,2295.0,515000000.0&quot;</code></pre>
 <p>&lt;&lt;&lt;&lt;<分隔>&gt;&gt;&gt;&gt;</p>
 </div>
 <div id="-read.table" class="section level2">
@@ -391,47 +402,67 @@ stockMajor &lt;-<span class="st"> </span><span class="kw">cbind</span>(日期 =<
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># library(RCurl)</span>
 <span class="co"># Cl_info = read.table(sep=&quot;,&quot;, header=TRUE, stringsAsFactors=F, file=textConnection(getURL(&quot;https://raw.githubusercontent.com/suensummit/RCourseBankSinoPac/gh-pages/data/cl_info_other.csv&quot;)))</span>
 
-Cl_info =<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">file =</span> <span class="st">&quot;data/cl_info_other.csv&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;,&quot;</span>, <span class="dt">stringsAsFactors =</span> F, <span class="dt">header =</span> T, <span class="dt">colClasses =</span> <span class="kw">c</span>(<span class="st">&quot;character&quot;</span>, <span class="st">&quot;integer&quot;</span>, <span class="st">&quot;Date&quot;</span>, <span class="st">&quot;character&quot;</span>, <span class="st">&quot;Date&quot;</span>, <span class="st">&quot;character&quot;</span>, <span class="st">&quot;integer&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;integer&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;integer&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;integer&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;integer&quot;</span>, <span class="st">&quot;numeric&quot;</span>))
+Cl_info =<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">file =</span> <span class="st">&quot;data/cl_info_other.csv&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;,&quot;</span>, <span class="dt">stringsAsFactors =</span> F, <span class="dt">header =</span> T, <span class="dt">colClasses =</span> <span class="kw">c</span>(<span class="st">&quot;character&quot;</span>, <span class="st">&quot;character&quot;</span>, <span class="st">&quot;character&quot;</span>, <span class="st">&quot;character&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;numeric&quot;</span>), <span class="dt">encoding =</span> <span class="st">&quot;BIG-5&quot;</span>)
 <span class="kw">head</span>(Cl_info)</code></pre>
-<pre><code>##   X.1 X     etl_dt  bank_code    data_dt                  bank_nm
-## 1   1 1 2013-11-26 020        2006-01-01         日商瑞穗實業銀行
-## 2   2 2 2013-11-26 N000       2006-01-01 台北縣淡水第一信用合作社
-## 3   3 3 2013-11-26 809        2006-01-01             萬泰商業銀行
-## 4   4 4 2013-11-26 146        2006-01-01     台中市第二信用合作社
-## 5   5 5 2013-11-26 115        2006-01-01     基隆市第二信用合作社
-## 6   6 6 2013-11-26 N005       2006-01-01       高雄第三信用合作社
-##   mortgage_cnt mortgage_bal decorator_hse_cnt decorator_hse_bal ln_car_cnt
-## 1            0   0.0000e+00                 0        0.0000e+00          0
-## 2         9924   1.6873e+10               173        1.8300e+08          2
-## 3         4051   5.6240e+09              1329        1.4710e+09       3128
-## 4        11167   1.8949e+10               118        9.7000e+07         11
-## 5         1551   3.7730e+09               336        4.7000e+08        178
-## 6         1903   2.4760e+09              7828        1.1257e+10          0
-##   ln_car_bal ln_worker_cnt ln_worker_bal other_cl_cnt other_cl_bal
-## 1   0.00e+00             0      0.00e+00            0   0.0000e+00
-## 2   1.00e+06           953      3.72e+08         1101   3.0900e+08
-## 3   9.26e+08             0      0.00e+00      1697098   7.6111e+10
-## 4   0.00e+00             0      0.00e+00         1027   3.9900e+08
-## 5   4.70e+07             0      0.00e+00         2295   5.1500e+08
-## 6   0.00e+00           984      5.80e+08         2866   9.4600e+08</code></pre>
+<pre><code>##                       etl_dt  bank_code             data_dt
+## 1 2013-11-26 22:30:07.971327 020        2006-01-01 00:00:00
+## 2 2013-11-26 22:30:07.974241 N000       2006-01-01 00:00:00
+## 3 2013-11-26 22:30:07.979319 809        2006-01-01 00:00:00
+## 4 2013-11-26 22:30:07.995118 146        2006-01-01 00:00:00
+## 5 2013-11-26 22:30:08.015108 115        2006-01-01 00:00:00
+## 6 2013-11-26 22:30:08.052642 N005       2006-01-01 00:00:00
+##                    bank_nm mortgage_cnt mortgage_bal decorator_hse_cnt
+## 1         日商瑞穗實業銀行            0   0.0000e+00                 0
+## 2 台北縣淡水第一信用合作社         9924   1.6873e+10               173
+## 3             萬泰商業銀行         4051   5.6240e+09              1329
+## 4     台中市第二信用合作社        11167   1.8949e+10               118
+## 5     基隆市第二信用合作社         1551   3.7730e+09               336
+## 6       高雄第三信用合作社         1903   2.4760e+09              7828
+##   decorator_hse_bal ln_car_cnt ln_car_bal ln_worker_cnt ln_worker_bal
+## 1        0.0000e+00          0   0.00e+00             0      0.00e+00
+## 2        1.8300e+08          2   1.00e+06           953      3.72e+08
+## 3        1.4710e+09       3128   9.26e+08             0      0.00e+00
+## 4        9.7000e+07         11   0.00e+00             0      0.00e+00
+## 5        4.7000e+08        178   4.70e+07             0      0.00e+00
+## 6        1.1257e+10          0   0.00e+00           984      5.80e+08
+##   other_cl_cnt other_cl_bal
+## 1            0   0.0000e+00
+## 2         1101   3.0900e+08
+## 3      1697098   7.6111e+10
+## 4         1027   3.9900e+08
+## 5         2295   5.1500e+08
+## 6         2866   9.4600e+08</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(Cl_info)</code></pre>
-<pre><code>## 'data.frame':    9041 obs. of  16 variables:
-##  $ X.1              : chr  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; ...
-##  $ X                : int  1 2 3 4 5 6 7 8 9 10 ...
-##  $ etl_dt           : Date, format: &quot;2013-11-26&quot; &quot;2013-11-26&quot; ...
+<pre><code>## 'data.frame':    9041 obs. of  14 variables:
+##  $ etl_dt           : chr  &quot;2013-11-26 22:30:07.971327&quot; &quot;2013-11-26 22:30:07.974241&quot; &quot;2013-11-26 22:30:07.979319&quot; &quot;2013-11-26 22:30:07.995118&quot; ...
 ##  $ bank_code        : chr  &quot;020       &quot; &quot;N000      &quot; &quot;809       &quot; &quot;146       &quot; ...
-##  $ data_dt          : Date, format: &quot;2006-01-01&quot; &quot;2006-01-01&quot; ...
+##  $ data_dt          : chr  &quot;2006-01-01 00:00:00&quot; &quot;2006-01-01 00:00:00&quot; &quot;2006-01-01 00:00:00&quot; &quot;2006-01-01 00:00:00&quot; ...
 ##  $ bank_nm          : chr  &quot;日商瑞穗實業銀行&quot; &quot;台北縣淡水第一信用合作社&quot; &quot;萬泰商業銀行&quot; &quot;台中市第二信用合作社&quot; ...
-##  $ mortgage_cnt     : int  0 9924 4051 11167 1551 1903 35924 5351 62 10 ...
+##  $ mortgage_cnt     : num  0 9924 4051 11167 1551 ...
 ##  $ mortgage_bal     : num  0.00 1.69e+10 5.62e+09 1.89e+10 3.77e+09 ...
-##  $ decorator_hse_cnt: int  0 173 1329 118 336 7828 11682 1192 22 0 ...
+##  $ decorator_hse_cnt: num  0 173 1329 118 336 ...
 ##  $ decorator_hse_bal: num  0.00 1.83e+08 1.47e+09 9.70e+07 4.70e+08 ...
-##  $ ln_car_cnt       : int  0 2 3128 11 178 0 49817 0 0 0 ...
+##  $ ln_car_cnt       : num  0 2 3128 11 178 ...
 ##  $ ln_car_bal       : num  0.00 1.00e+06 9.26e+08 0.00 4.70e+07 ...
-##  $ ln_worker_cnt    : int  0 953 0 0 0 984 277 0 0 0 ...
+##  $ ln_worker_cnt    : num  0 953 0 0 0 984 277 0 0 0 ...
 ##  $ ln_worker_bal    : num  0.00 3.72e+08 0.00 0.00 0.00 5.80e+08 6.10e+07 0.00 0.00 0.00 ...
-##  $ other_cl_cnt     : int  0 1101 1697098 1027 2295 2866 377762 5281 172 0 ...
+##  $ other_cl_cnt     : num  0 1101 1697098 1027 2295 ...
 ##  $ other_cl_bal     : num  0.00 3.09e+08 7.61e+10 3.99e+08 5.15e+08 ...</code></pre>
+<div id="data-frame" class="section level3">
+<h3>- 輸出形態為Data Frame</h3>
+</div>
+<div id="file-" class="section level3">
+<h3>- file 就是指讀入的檔案路徑</h3>
+</div>
+<div id="sep-csv" class="section level3">
+<h3>- sep 指的是欄位分割用的符號,通常csv檔案格式是透過,做分割</h3>
+</div>
+<div id="stringsasfactors-true-factor" class="section level3">
+<h3>- stringsAsFactors 預設是True, 讓讀入的字串用Factor儲存，那麼資料就會轉為整數儲存與對照表</h3>
+</div>
+<div id="header-falsedataframecolnames" class="section level3">
+<h3>- header 預設是False，表示第一行是不是表格標頭，輸出的dataframe欄位名的colnames</h3>
+</div>
 </div>
 <div id="-write.table-" class="section level2">
 <h2>使用 <code>write.table</code> 寫資料</h2>
@@ -584,7 +615,7 @@ creditData &lt;-<span class="st"> </span><span class="kw">do.call</span>(<span c
 <div id="-dplyr" class="section level2">
 <h2>簡介 <code>dplyr</code></h2>
 <p>官方的學習文件：<code>vignette</code></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># library(dplyr)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
 <span class="kw">vignette</span>(<span class="dt">all =</span> <span class="ot">TRUE</span>, <span class="dt">package =</span> <span class="st">&quot;dplyr&quot;</span>)
 <span class="kw">vignette</span>(<span class="st">&quot;introduction&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;dplyr&quot;</span>)</code></pre>
 <div id="-r-" class="section level3">
@@ -635,13 +666,13 @@ creditData &lt;-<span class="st"> </span><span class="kw">do.call</span>(<span c
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Example 1: select</span>
 Cl_demo1 =<span class="st"> </span><span class="kw">select</span>(Cl_info, data_dt, bank_nm, mortgage_bal)
 <span class="kw">head</span>(Cl_demo1)</code></pre>
-<pre><code>##      data_dt                  bank_nm mortgage_bal
-## 1 2006-01-01         日商瑞穗實業銀行   0.0000e+00
-## 2 2006-01-01 台北縣淡水第一信用合作社   1.6873e+10
-## 3 2006-01-01             萬泰商業銀行   5.6240e+09
-## 4 2006-01-01     台中市第二信用合作社   1.8949e+10
-## 5 2006-01-01     基隆市第二信用合作社   3.7730e+09
-## 6 2006-01-01       高雄第三信用合作社   2.4760e+09</code></pre>
+<pre><code>##               data_dt                  bank_nm mortgage_bal
+## 1 2006-01-01 00:00:00         日商瑞穗實業銀行   0.0000e+00
+## 2 2006-01-01 00:00:00 台北縣淡水第一信用合作社   1.6873e+10
+## 3 2006-01-01 00:00:00             萬泰商業銀行   5.6240e+09
+## 4 2006-01-01 00:00:00     台中市第二信用合作社   1.8949e+10
+## 5 2006-01-01 00:00:00     基隆市第二信用合作社   3.7730e+09
+## 6 2006-01-01 00:00:00       高雄第三信用合作社   2.4760e+09</code></pre>
 </div>
 </div>
 <div id="filter" class="section level2">
@@ -655,27 +686,34 @@ Cl_demo1 =<span class="st"> </span><span class="kw">select</span>(Cl_info, data_
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Example 2: filter</span>
 Cl_demo2 =<span class="st"> </span><span class="kw">filter</span>(Cl_info, mortgage_bal &gt;<span class="st"> </span><span class="dv">1000000</span>)
 <span class="kw">head</span>(Cl_demo2)</code></pre>
-<pre><code>##   X.1 X     etl_dt  bank_code    data_dt                  bank_nm
-## 1   2 2 2013-11-26 N000       2006-01-01 台北縣淡水第一信用合作社
-## 2   3 3 2013-11-26 809        2006-01-01             萬泰商業銀行
-## 3   4 4 2013-11-26 146        2006-01-01     台中市第二信用合作社
-## 4   5 5 2013-11-26 115        2006-01-01     基隆市第二信用合作社
-## 5   6 6 2013-11-26 N005       2006-01-01       高雄第三信用合作社
-## 6   7 7 2013-11-26 803        2006-01-01             聯邦商業銀行
-##   mortgage_cnt mortgage_bal decorator_hse_cnt decorator_hse_bal ln_car_cnt
-## 1         9924   1.6873e+10               173        1.8300e+08          2
-## 2         4051   5.6240e+09              1329        1.4710e+09       3128
-## 3        11167   1.8949e+10               118        9.7000e+07         11
-## 4         1551   3.7730e+09               336        4.7000e+08        178
-## 5         1903   2.4760e+09              7828        1.1257e+10          0
-## 6        35924   6.4191e+10             11682        2.1458e+10      49817
-##   ln_car_bal ln_worker_cnt ln_worker_bal other_cl_cnt other_cl_bal
-## 1 1.0000e+06           953      3.72e+08         1101   3.0900e+08
-## 2 9.2600e+08             0      0.00e+00      1697098   7.6111e+10
-## 3 0.0000e+00             0      0.00e+00         1027   3.9900e+08
-## 4 4.7000e+07             0      0.00e+00         2295   5.1500e+08
-## 5 0.0000e+00           984      5.80e+08         2866   9.4600e+08
-## 6 1.5844e+10           277      6.10e+07       377762   1.3496e+10</code></pre>
+<pre><code>##                       etl_dt  bank_code             data_dt
+## 1 2013-11-26 22:30:07.974241 N000       2006-01-01 00:00:00
+## 2 2013-11-26 22:30:07.979319 809        2006-01-01 00:00:00
+## 3 2013-11-26 22:30:07.995118 146        2006-01-01 00:00:00
+## 4 2013-11-26 22:30:08.015108 115        2006-01-01 00:00:00
+## 5 2013-11-26 22:30:08.052642 N005       2006-01-01 00:00:00
+## 6 2013-11-26 22:30:08.229513 803        2006-01-01 00:00:00
+##                    bank_nm mortgage_cnt mortgage_bal decorator_hse_cnt
+## 1 台北縣淡水第一信用合作社         9924   1.6873e+10               173
+## 2             萬泰商業銀行         4051   5.6240e+09              1329
+## 3     台中市第二信用合作社        11167   1.8949e+10               118
+## 4     基隆市第二信用合作社         1551   3.7730e+09               336
+## 5       高雄第三信用合作社         1903   2.4760e+09              7828
+## 6             聯邦商業銀行        35924   6.4191e+10             11682
+##   decorator_hse_bal ln_car_cnt ln_car_bal ln_worker_cnt ln_worker_bal
+## 1        1.8300e+08          2 1.0000e+06           953      3.72e+08
+## 2        1.4710e+09       3128 9.2600e+08             0      0.00e+00
+## 3        9.7000e+07         11 0.0000e+00             0      0.00e+00
+## 4        4.7000e+08        178 4.7000e+07             0      0.00e+00
+## 5        1.1257e+10          0 0.0000e+00           984      5.80e+08
+## 6        2.1458e+10      49817 1.5844e+10           277      6.10e+07
+##   other_cl_cnt other_cl_bal
+## 1         1101   3.0900e+08
+## 2      1697098   7.6111e+10
+## 3         1027   3.9900e+08
+## 4         2295   5.1500e+08
+## 5         2866   9.4600e+08
+## 6       377762   1.3496e+10</code></pre>
 </div>
 </div>
 <div id="mutate" class="section level2">
@@ -689,27 +727,34 @@ Cl_demo2 =<span class="st"> </span><span class="kw">filter</span>(Cl_info, mortg
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Example 3: mutate</span>
 Cl_demo3 =<span class="st"> </span><span class="kw">mutate</span>(Cl_info, <span class="dt">mortage =</span> mortgage_bal/<span class="dv">1000000</span>)
 <span class="kw">head</span>(Cl_demo3)</code></pre>
-<pre><code>##   X.1 X     etl_dt  bank_code    data_dt                  bank_nm
-## 1   1 1 2013-11-26 020        2006-01-01         日商瑞穗實業銀行
-## 2   2 2 2013-11-26 N000       2006-01-01 台北縣淡水第一信用合作社
-## 3   3 3 2013-11-26 809        2006-01-01             萬泰商業銀行
-## 4   4 4 2013-11-26 146        2006-01-01     台中市第二信用合作社
-## 5   5 5 2013-11-26 115        2006-01-01     基隆市第二信用合作社
-## 6   6 6 2013-11-26 N005       2006-01-01       高雄第三信用合作社
-##   mortgage_cnt mortgage_bal decorator_hse_cnt decorator_hse_bal ln_car_cnt
-## 1            0   0.0000e+00                 0        0.0000e+00          0
-## 2         9924   1.6873e+10               173        1.8300e+08          2
-## 3         4051   5.6240e+09              1329        1.4710e+09       3128
-## 4        11167   1.8949e+10               118        9.7000e+07         11
-## 5         1551   3.7730e+09               336        4.7000e+08        178
-## 6         1903   2.4760e+09              7828        1.1257e+10          0
-##   ln_car_bal ln_worker_cnt ln_worker_bal other_cl_cnt other_cl_bal mortage
-## 1   0.00e+00             0      0.00e+00            0   0.0000e+00       0
-## 2   1.00e+06           953      3.72e+08         1101   3.0900e+08   16873
-## 3   9.26e+08             0      0.00e+00      1697098   7.6111e+10    5624
-## 4   0.00e+00             0      0.00e+00         1027   3.9900e+08   18949
-## 5   4.70e+07             0      0.00e+00         2295   5.1500e+08    3773
-## 6   0.00e+00           984      5.80e+08         2866   9.4600e+08    2476</code></pre>
+<pre><code>##                       etl_dt  bank_code             data_dt
+## 1 2013-11-26 22:30:07.971327 020        2006-01-01 00:00:00
+## 2 2013-11-26 22:30:07.974241 N000       2006-01-01 00:00:00
+## 3 2013-11-26 22:30:07.979319 809        2006-01-01 00:00:00
+## 4 2013-11-26 22:30:07.995118 146        2006-01-01 00:00:00
+## 5 2013-11-26 22:30:08.015108 115        2006-01-01 00:00:00
+## 6 2013-11-26 22:30:08.052642 N005       2006-01-01 00:00:00
+##                    bank_nm mortgage_cnt mortgage_bal decorator_hse_cnt
+## 1         日商瑞穗實業銀行            0   0.0000e+00                 0
+## 2 台北縣淡水第一信用合作社         9924   1.6873e+10               173
+## 3             萬泰商業銀行         4051   5.6240e+09              1329
+## 4     台中市第二信用合作社        11167   1.8949e+10               118
+## 5     基隆市第二信用合作社         1551   3.7730e+09               336
+## 6       高雄第三信用合作社         1903   2.4760e+09              7828
+##   decorator_hse_bal ln_car_cnt ln_car_bal ln_worker_cnt ln_worker_bal
+## 1        0.0000e+00          0   0.00e+00             0      0.00e+00
+## 2        1.8300e+08          2   1.00e+06           953      3.72e+08
+## 3        1.4710e+09       3128   9.26e+08             0      0.00e+00
+## 4        9.7000e+07         11   0.00e+00             0      0.00e+00
+## 5        4.7000e+08        178   4.70e+07             0      0.00e+00
+## 6        1.1257e+10          0   0.00e+00           984      5.80e+08
+##   other_cl_cnt other_cl_bal mortage
+## 1            0   0.0000e+00       0
+## 2         1101   3.0900e+08   16873
+## 3      1697098   7.6111e+10    5624
+## 4         1027   3.9900e+08   18949
+## 5         2295   5.1500e+08    3773
+## 6         2866   9.4600e+08    2476</code></pre>
 </div>
 </div>
 <div id="arrange" class="section level2">
@@ -723,27 +768,34 @@ Cl_demo3 =<span class="st"> </span><span class="kw">mutate</span>(Cl_info, <span
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Example 4: arrange</span>
 Cl_demo4 =<span class="st"> </span><span class="kw">arrange</span>(Cl_info, mortgage_bal, <span class="kw">desc</span>(data_dt))
 <span class="kw">head</span>(Cl_demo4)</code></pre>
-<pre><code>##    X.1    X     etl_dt  bank_code    data_dt          bank_nm mortgage_cnt
-## 1 8951 8951 2014-04-19 093        2014-02-01   荷蘭商安智銀行            0
-## 2 8957 8957 2014-04-19 040        2014-02-01 中華開發工業銀行            0
-## 3 8966 8966 2014-04-19 090        2014-02-01 加拿大商豐業銀行            0
-## 4 8967 8967 2014-04-19 N026       2014-02-01     日商瑞穗銀行            0
-## 5 8968 8968 2014-04-19 023        2014-02-01     泰國盤谷銀行            0
-## 6 8970 8970 2014-04-19 N023       2014-02-01   大陸商交通銀行            0
-##   mortgage_bal decorator_hse_cnt decorator_hse_bal ln_car_cnt ln_car_bal
-## 1            0                 0                 0          0          0
-## 2            0                 0                 0          0          0
-## 3            0                 0                 0          0          0
-## 4            0                 0                 0          0          0
-## 5            0                 0                 0          0          0
-## 6            0                 0                 0          0          0
-##   ln_worker_cnt ln_worker_bal other_cl_cnt other_cl_bal
-## 1             0             0            0        0e+00
-## 2             0             0            8        2e+06
-## 3             0             0            0        0e+00
-## 4             0             0            0        0e+00
-## 5             0             0            0        0e+00
-## 6             0             0            0        0e+00</code></pre>
+<pre><code>##                       etl_dt  bank_code             data_dt
+## 1 2014-04-19 07:59:29.921756 093        2014-02-01 00:00:00
+## 2 2014-04-19 07:59:29.824336 040        2014-02-01 00:00:00
+## 3 2014-04-19 07:59:30.146603 090        2014-02-01 00:00:00
+## 4 2014-04-19 07:59:29.907231 N026       2014-02-01 00:00:00
+## 5 2014-04-19 07:59:30.024388 023        2014-02-01 00:00:00
+## 6 2014-04-19 07:59:30.088385 N023       2014-02-01 00:00:00
+##            bank_nm mortgage_cnt mortgage_bal decorator_hse_cnt
+## 1   荷蘭商安智銀行            0            0                 0
+## 2 中華開發工業銀行            0            0                 0
+## 3 加拿大商豐業銀行            0            0                 0
+## 4     日商瑞穗銀行            0            0                 0
+## 5     泰國盤谷銀行            0            0                 0
+## 6   大陸商交通銀行            0            0                 0
+##   decorator_hse_bal ln_car_cnt ln_car_bal ln_worker_cnt ln_worker_bal
+## 1                 0          0          0             0             0
+## 2                 0          0          0             0             0
+## 3                 0          0          0             0             0
+## 4                 0          0          0             0             0
+## 5                 0          0          0             0             0
+## 6                 0          0          0             0             0
+##   other_cl_cnt other_cl_bal
+## 1            0        0e+00
+## 2            8        2e+06
+## 3            0        0e+00
+## 4            0        0e+00
+## 5            0        0e+00
+## 6            0        0e+00</code></pre>
 </div>
 </div>
 <div id="group_by-summarise" class="section level2">
