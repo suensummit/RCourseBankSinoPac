@@ -164,15 +164,30 @@ data_table
 
 ## 基本資料讀寫
 
-其他都可以忘記，至少要記得 `read.table`
+我今天拿到一個文字檔案（TXT、CSV、TSV⋯⋯）
 
 ```{r}
 library(RCurl)
-Cl_info = read.table(sep=",", header=TRUE, stringsAsFactors=F, file=textConnection(getURL("https://raw.githubusercontent.com/ntuaha/R_ETL_DSC_2015/gh-pages/cl_info_other.csv")))
+file <- textConnection(getURL("https://raw.githubusercontent.com/ntuaha/R_ETL_DSC_2015/gh-pages/cl_info_other.csv"))
 
-# Cl_info = read.table(file="./data/cl_info_other.csv",sep=",",stringsAsFactors=F,header=T)
+```
+
+首先，觀察檔案的格式、欄位、資料型態
+
+### 利用 `readLines`，先把前幾行資料讀進來觀察
+
+
+
+其他都可以忘記，至少要記得 `read.table`
+
+```{r}
+
+# Cl_info = read.table(sep=",", header=TRUE, stringsAsFactors=F, file=textConnection(getURL("https://raw.githubusercontent.com/ntuaha/R_ETL_DSC_2015/gh-pages/cl_info_other.csv")))
+
+Cl_info = read.table(file="data/cl_info_other.csv",sep=",",stringsAsFactors=F,header=T)
 
 head(Cl_info)
+write.csv(Cl_info, file = "data/cl_info_other.csv")
 ```
 
 [銀行局](https://survey.banking.gov.tw/statis/stmain.jsp?sys=100&funid=r100)
