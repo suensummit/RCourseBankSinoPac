@@ -48,7 +48,7 @@ code > span.er { font-weight: bold; }
 </style>
 
 
-<link href="data:text/css,body%20%7B%0A%20%20background%2Dcolor%3A%20rgba%28200%2C%20200%2C%20200%2C%200%2E6%29%3B%0A%7D%0A%0A%2Emain%2Dcontainer%20%7B%0A%20%20background%2Dcolor%3A%20%23ffffff%3B%0A%7D%0A" rel="stylesheet" type="text/css" />
+<link href="data:text/css,body%20%7B%0A%20%20background%2Dcolor%3A%20rgba%28200%2C%20200%2C%20200%2C%200%2E6%29%3B%0A%7D%0A%0A%2Emain%2Dcontainer%20%7B%0A%20%20background%2Dcolor%3A%20rgba%280%2C%200%2C%200%2C%201%29%3B%0A%7D%0A" rel="stylesheet" type="text/css" />
 
 </head>
 
@@ -288,21 +288,21 @@ if (.Platform$OS.type ==<span class="st"> &quot;windows&quot;</span>){
 <span class="co"># View(data_table)</span>
 data_table</code></pre>
 <pre><code>##      買超券商 買進 賣出 買超   賣超券商 買進 賣出 賣超
-## 1  港商德意志   11    3    8   群益金鼎    1   16  -15
-## 2    美商高盛    8    0    8 香港上海匯    0   11  -11
+## 1    美商高盛    8    0    8   群益金鼎    1   16  -15
+## 2  港商德意志   11    3    8 香港上海匯    0   11  -11
 ## 3  港商麥格里    7    0    7   凱基證券    5   16  -11
 ## 4        臺銀    7    0    7   鑫豐證券    0    8   -8
-## 5    元大證券   23   18    5 新加坡商瑞    2    7   -5
-## 6  台灣東方匯    5    0    5       元富    0    5   -5
-## 7    瑞士信貸    4    0    4 永豐金證券    2    7   -5
-## 8    台中商銀    3    0    3   國泰證券    0    4   -4
-## 9    兆豐證券    5    2    3   日盛證券    0    2   -2
-## 10     第一金    2    0    2   國票證券    0    1   -1
-## 11       永興    2    0    2     新百王    0    1   -1
-## 12   宏遠證券    1    0    1       統一    1    2   -1
-## 13   摩根大通    1    0    1   致和證券    1    2   -1
-## 14   大昌證券    1    0    1       美林    8    9   -1
-## 15   台灣工銀    0    0    0 台灣摩根士    3    4   -1</code></pre>
+## 5  台灣東方匯    5    0    5       元富    0    5   -5
+## 6    元大證券   23   18    5 永豐金證券    2    7   -5
+## 7    瑞士信貸    4    0    4 新加坡商瑞    2    7   -5
+## 8    兆豐證券    5    2    3   國泰證券    0    4   -4
+## 9    台中商銀    3    0    3   日盛證券    0    2   -2
+## 10       永興    2    0    2       統一    1    2   -1
+## 11     第一金    2    0    2   致和證券    1    2   -1
+## 12   宏遠證券    1    0    1       美林    8    9   -1
+## 13   摩根大通    1    0    1 台灣摩根士    3    4   -1
+## 14   大昌證券    1    0    1   合庫證券    1    2   -1
+## 15       彰銀    0    0    0   大慶證券    0    1   -1</code></pre>
 <p>左右兩欄的表格應該整併成同一欄</p>
 <p>並且加入時間欄位</p>
 <p>塞進資料庫／檔案做儲存</p>
@@ -431,21 +431,20 @@ data_table</code></pre>
 <p>首先，觀察檔案的格式、欄位、資料型態</p>
 <div id="-readlines" class="section level3">
 <h3>利用 <code>readLines</code>，先把前幾行資料讀進來觀察</h3>
-<pre class="sourceCode r"><code class="sourceCode r">filename &lt;-<span class="st"> &quot;~/Downloads/29010.xls&quot;</span>
-filename &lt;-<span class="st"> &quot;~/Downloads/10401信用卡重要資訊揭露.xlsx&quot;</span>
+<pre class="sourceCode r"><code class="sourceCode r">filename &lt;-<span class="st"> &quot;data/29010.xls&quot;</span>
+filename &lt;-<span class="st"> &quot;data/10401信用卡重要資訊揭露.xlsx&quot;</span>
 raw &lt;-<span class="st"> </span><span class="kw">readLines</span>(filename, <span class="dt">n =</span> 10L, <span class="dt">encoding =</span> <span class="st">&quot;BIG-5&quot;</span>, <span class="dt">warn =</span> <span class="ot">FALSE</span>)
 raw &lt;-<span class="st"> </span><span class="kw">iconv</span>(raw, <span class="dt">from =</span> <span class="st">&quot;BIG-5&quot;</span>, <span class="dt">to =</span> <span class="st">&quot;UTF-8&quot;</span>)</code></pre>
 </div>
 <div id="-colclasses" class="section level3">
 <h3>預先設定欄位的大小及資料型態 <code>colClasses</code>，讓讀檔速度加快（執行時不用去猜資料的大小、格式與資料型態）</h3>
-<pre class="sourceCode r"><code class="sourceCode r"> =<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">'檔案路徑'</span>, <span class="dt">colClasses =</span> <span class="kw">c</span>(<span class="st">&quot;factor&quot;</span>,<span class="st">&quot;integer&quot;</span>,<span class="st">&quot;integer&quot;</span>,<span class="st">&quot;numeric&quot;</span>,<span class="st">&quot;numeric&quot;</span>,<span class="st">&quot;numeric&quot;</span>,<span class="st">&quot;numeric&quot;</span>,<span class="st">&quot;integer&quot;</span>,<span class="st">&quot;numeric&quot;</span>,<span class="st">&quot;integer&quot;</span>,<span class="st">&quot;integer&quot;</span>,<span class="st">&quot;numeric&quot;</span>,<span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;integer&quot;</span>,<span class="st">&quot;integer&quot;</span>,<span class="st">&quot;numeric&quot;</span>,<span class="st">&quot;numeric&quot;</span>,<span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;numeric&quot;</span>,<span class="st">&quot;numeric&quot;</span>,<span class="st">&quot;numeric&quot;</span>), <span class="dt">fileEncoding =</span> <span class="st">'utf8'</span>)</code></pre>
 </div>
 <div id="-xlconnectexistssheet--excel-sheet-xlsxread.xlsx2-" class="section level3">
 <h3>一般來說，使用 <code>XLConnect::existsSheet</code> 取得 Excel 檔案的表單資訊（sheet），再用 <code>xlsx::read.xlsx2</code> 讀檔（較快）</h3>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(xlsx)
 <span class="kw">library</span>(magrittr)
-filename &lt;-<span class="st"> &quot;~/Downloads/29010.xls&quot;</span>
-filename &lt;-<span class="st"> &quot;~/Downloads/10401信用卡重要資訊揭露.xlsx&quot;</span>
+filename &lt;-<span class="st"> &quot;data/29010.xls&quot;</span>
+filename &lt;-<span class="st"> &quot;data/10401信用卡重要資訊揭露.xlsx&quot;</span>
 credit_rownames &lt;-<span class="st"> </span><span class="kw">read.xlsx2</span>(filename, <span class="dt">sheetIndex =</span> <span class="dv">1</span>, <span class="dt">startRow =</span> <span class="dv">4</span>, <span class="dt">endRow =</span> <span class="dv">8</span>, <span class="dt">as.data.frame =</span> <span class="ot">TRUE</span>, <span class="dt">header =</span> <span class="ot">FALSE</span>, <span class="dt">colClasses =</span> <span class="kw">c</span>(<span class="st">&quot;character&quot;</span>, <span class="st">&quot;character&quot;</span>, <span class="st">&quot;character&quot;</span>, <span class="st">&quot;character&quot;</span>))
 credit_10401 &lt;-<span class="st"> </span><span class="kw">read.xlsx2</span>(filename, <span class="dt">sheetIndex =</span> <span class="dv">1</span>, <span class="dt">startRow =</span> <span class="dv">9</span>, <span class="dt">endRow =</span> <span class="dv">45</span>, <span class="dt">as.data.frame =</span> <span class="ot">TRUE</span>, <span class="dt">header =</span> <span class="ot">FALSE</span>, <span class="dt">colClasses =</span> <span class="kw">c</span>(<span class="st">&quot;character&quot;</span>, <span class="st">&quot;integer&quot;</span>, <span class="st">&quot;integer&quot;</span>, <span class="st">&quot;integer&quot;</span>, <span class="st">&quot;integer&quot;</span>, <span class="st">&quot;integer&quot;</span>, <span class="st">&quot;integer&quot;</span>, <span class="st">&quot;integer&quot;</span>, <span class="st">&quot;integer&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;numeric&quot;</span>, <span class="st">&quot;integer&quot;</span>, <span class="st">&quot;integer&quot;</span>))
 <span class="co"># 放 View 的 table 截圖</span>
@@ -495,7 +494,8 @@ credit_10401_2[-<span class="dv">1</span>] &lt;-<span class="st"> </span><span c
 ##  $ X14: num  318 1895 0 5498 0 ...</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">row.names</span>(credit_10401) &lt;-<span class="st"> </span><span class="ot">NULL</span></code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(XLConnect)
-wb =<span class="st"> </span>XLConnect::<span class="kw">loadWorkbook</span>(<span class="st">&quot;~/Downloads/29010.xls&quot;</span>)
+filename &lt;-<span class="st"> &quot;data/29010.xls&quot;</span>
+wb =<span class="st"> </span>XLConnect::<span class="kw">loadWorkbook</span>(<span class="dt">filename =</span> filename)
 data =<span class="st"> </span>XLConnect::<span class="kw">readWorksheet</span>(wb, <span class="dt">sheet =</span> <span class="st">&quot;9-1&quot;</span>)
 <span class="kw">head</span>(data)</code></pre>
 <pre><code>##                                  X9.1.信用卡重要業務與財務資訊    Col2
@@ -577,11 +577,10 @@ data =<span class="st"> </span>XLConnect::<span class="kw">readWorksheet</span>(
 ##  $ Col14                        : chr  &quot;0&quot; &quot;0&quot; &quot;0&quot; &quot;0&quot; ...
 ##  $ Col15                        : chr  &quot;1,189&quot; &quot;4,017&quot; &quot;29,057&quot; &quot;1,800&quot; ...</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(readxl)
-filename &lt;-<span class="st"> &quot;~/Downloads/29010.xls&quot;</span>
-filename &lt;-<span class="st"> &quot;~/Downloads/10401信用卡重要資訊揭露.xlsx&quot;</span>
-sheetNames &lt;-<span class="st"> </span><span class="kw">excel_sheets</span>(filename)
-resxl &lt;-<span class="st"> </span><span class="kw">read_excel</span>(filename, <span class="dt">sheet =</span> sheetNames[<span class="dv">1</span>], <span class="dt">col_names =</span> <span class="ot">TRUE</span>, <span class="dt">skip =</span> <span class="dv">4</span>)
-resxl &lt;-<span class="st"> </span>resxl[<span class="dv">4</span>:<span class="dv">41</span>,]
+filename &lt;-<span class="st"> &quot;data/29010.xls&quot;</span>
+filename &lt;-<span class="st"> &quot;data/10401信用卡重要資訊揭露.xlsx&quot;</span>
+sheetNames &lt;-<span class="st"> </span><span class="kw">excel_sheets</span>(filename)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">resxl &lt;-<span class="st"> </span>resxl[<span class="dv">4</span>:<span class="dv">41</span>,]
 resxl[-<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">lapply</span>(resxl[-<span class="dv">1</span>], as.numeric)
 <span class="co"># colnames(resxl)=iconv(colnames(resxl),'utf8','big5')</span>
 <span class="kw">str</span>(resxl)</code></pre>
@@ -602,43 +601,9 @@ resxl[-<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw"
 ##  $ 當年度轉銷    : num  318 1895 0 5498 0 ...</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># barplot(height = resxl$流通卡數, names.arg = resxl$金融機構名稱)</span>
 <span class="co"># View(resxl)</span>
-resxl_2 &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;~/Downloads/29010.xls&quot;</span>, <span class="dt">sheet =</span> <span class="dv">2</span>, <span class="dt">col_names =</span> <span class="ot">FALSE</span>)</code></pre>
-<pre><code>## DEFINEDNAME: 20 00 00 01 0b 00 00 00 01 00 00 00 00 00 00 06 3b 00 00 00 00 2a 00 00 00 0e 00 
-## DEFINEDNAME: 20 00 00 01 0b 00 00 00 02 00 00 00 00 00 00 06 3b 01 00 00 00 2a 00 00 00 0e 00 
-## DEFINEDNAME: 20 00 00 01 0b 00 00 00 03 00 00 00 00 00 00 06 3b 02 00 00 00 2b 00 00 00 0e 00 
-## DEFINEDNAME: 00 00 00 06 0b 00 00 00 01 00 00 00 00 00 01 16 59 e8 90 c7 8c 99 65 5f 00 31 00 3b 00 00 00 00 2a 00 00 00 0e 00 
-## DEFINEDNAME: 00 00 00 06 0b 00 00 00 02 00 00 00 00 00 01 16 59 e8 90 c7 8c 99 65 5f 00 31 00 3b 01 00 00 00 2a 00 00 00 0e 00 
-## DEFINEDNAME: 00 00 00 06 0b 00 00 00 03 00 00 00 00 00 01 16 59 e8 90 c7 8c 99 65 5f 00 31 00 3b 02 00 00 00 01 00 00 00 0e 00 
-## DEFINEDNAME: 20 00 00 01 0b 00 00 00 01 00 00 00 00 00 00 06 3b 00 00 00 00 2a 00 00 00 0e 00 
-## DEFINEDNAME: 20 00 00 01 0b 00 00 00 02 00 00 00 00 00 00 06 3b 01 00 00 00 2a 00 00 00 0e 00 
-## DEFINEDNAME: 20 00 00 01 0b 00 00 00 03 00 00 00 00 00 00 06 3b 02 00 00 00 2b 00 00 00 0e 00 
-## DEFINEDNAME: 00 00 00 06 0b 00 00 00 01 00 00 00 00 00 01 16 59 e8 90 c7 8c 99 65 5f 00 31 00 3b 00 00 00 00 2a 00 00 00 0e 00 
-## DEFINEDNAME: 00 00 00 06 0b 00 00 00 02 00 00 00 00 00 01 16 59 e8 90 c7 8c 99 65 5f 00 31 00 3b 01 00 00 00 2a 00 00 00 0e 00 
-## DEFINEDNAME: 00 00 00 06 0b 00 00 00 03 00 00 00 00 00 01 16 59 e8 90 c7 8c 99 65 5f 00 31 00 3b 02 00 00 00 01 00 00 00 0e 00 
-## DEFINEDNAME: 20 00 00 01 0b 00 00 00 01 00 00 00 00 00 00 06 3b 00 00 00 00 2a 00 00 00 0e 00 
-## DEFINEDNAME: 20 00 00 01 0b 00 00 00 02 00 00 00 00 00 00 06 3b 01 00 00 00 2a 00 00 00 0e 00 
-## DEFINEDNAME: 20 00 00 01 0b 00 00 00 03 00 00 00 00 00 00 06 3b 02 00 00 00 2b 00 00 00 0e 00 
-## DEFINEDNAME: 00 00 00 06 0b 00 00 00 01 00 00 00 00 00 01 16 59 e8 90 c7 8c 99 65 5f 00 31 00 3b 00 00 00 00 2a 00 00 00 0e 00 
-## DEFINEDNAME: 00 00 00 06 0b 00 00 00 02 00 00 00 00 00 01 16 59 e8 90 c7 8c 99 65 5f 00 31 00 3b 01 00 00 00 2a 00 00 00 0e 00 
-## DEFINEDNAME: 00 00 00 06 0b 00 00 00 03 00 00 00 00 00 01 16 59 e8 90 c7 8c 99 65 5f 00 31 00 3b 02 00 00 00 01 00 00 00 0e 00</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># View(resxl_2)</span>
-<span class="kw">str</span>(resxl_2)</code></pre>
-<pre><code>## Classes 'tbl_df', 'tbl' and 'data.frame':    43 obs. of  15 variables:
-##  $ X1 : chr  &quot;9-1　信用卡重要業務與財務資訊(續一)&quot; &quot;9-1 Important Credit Card Business and Financial Information（Cont.1）&quot; NA &quot;　&quot; ...
-##  $ X2 : chr  NA NA NA &quot;流通&quot; ...
-##  $ X3 : chr  NA NA NA &quot;有效&quot; ...
-##  $ X4 : chr  NA NA &quot;民國104年10月&quot; &quot;本月&quot; ...
-##  $ X5 : chr  NA NA NA &quot;本月&quot; ...
-##  $ X6 : chr  NA NA NA &quot;循環信&quot; ...
-##  $ X7 : chr  NA NA NA &quot;本月簽&quot; ...
-##  $ X8 : chr  NA NA &quot; Oct., 2015&quot; &quot;本月預借&quot; ...
-##  $ X9 : chr  NA NA NA &quot;逾期帳款&quot; ...
-##  $ X10: chr  NA NA NA &quot;備抵&quot; ...
-##  $ X11: chr  NA NA NA &quot;本月轉銷&quot; ...
-##  $ X12: chr  NA NA NA &quot;循環信用&quot; ...
-##  $ X13: chr  NA NA NA &quot;簽帳手續&quot; ...
-##  $ X14: chr  NA NA NA &quot;預借現金&quot; ...
-##  $ X15: chr  NA NA &quot;單位：新臺幣百萬元 NT$ Million&quot; &quot;收單&quot; ...</code></pre>
+<span class="co"># resxl_2 &lt;- read_excel(filename, sheet = 2, col_names = FALSE)</span>
+<span class="co"># View(resxl_2)</span>
+<span class="co"># str(resxl_2)</span></code></pre>
 <hr />
 </div>
 </div>
@@ -675,7 +640,7 @@ resxl_2 &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<span c
 <h2>R 與 Database 的串接：以 SQLite 為例</h2>
 <p><a href="http://mlr.cs.umass.edu/ml/datasets/Bank+Marketing">範例資料</a></p>
 <p><a href="http://mlr.cs.umass.edu/ml/machine-learning-databases/00222/bank.zip">Download Sample file</a></p>
-<pre class="sourceCode r"><code class="sourceCode r">res &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;bank/bank-full.csv&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">sep =</span> <span class="st">&quot;;&quot;</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">res &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/bank/bank-full.csv&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">sep =</span> <span class="st">&quot;;&quot;</span>)</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(DBI)
 <span class="co"># Create an ephemeral in-memory RSQLite database</span>
 con &lt;-<span class="st"> </span><span class="kw">dbConnect</span>(RSQLite::<span class="kw">SQLite</span>(), <span class="st">&quot;:memory:&quot;</span>)
