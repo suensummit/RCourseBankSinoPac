@@ -16,9 +16,9 @@ output:
 ---
 ---
 
-## 暖身
+# 暖身
 
-### 環境設定：rJava Installation
+## 環境設定：rJava Installation
 
 在 Windows 系統裡使用 R，有時候會遇到一些棘手的 error；其中除了跟系統編碼（顯示亂碼）相關的問題以外，有一大宗都跟 `rJava` 這個套件有關。
 
@@ -41,7 +41,7 @@ Sys.setenv("JAVA_HOME"="path/where/java/installed")
 
 ---
 
-### 練習操作：R Basic Recap
+## 練習操作：R Basic Recap
 
 小提示 Tips
 
@@ -82,25 +82,25 @@ nrow(iris)
 
 ---
 
-## 今天的題目是 ETL：什麼是 ETL？
+# 今天的題目是 ETL：什麼是 ETL？
 
-### E = Extraction
+## E = Extract
 
-### T = Transform
+## T = Transform
 
-### L = Load
+## L = Load
 
-### 今天會用到的套件／重要函式：
+# 今天會用到的套件／重要函式：
 
-### - `readLine` | `read.table`
+## - `readLine` | `read.table`
 
-### - `readxl`
+## - `readxl`
 
-### - `magrittr`
+## - `magrittr`
 
-### - `dplyr` | `reshape2`
+## - `dplyr` | `reshape2`
 
-### - `RSQLite`
+## - `RSQLite`
 
 ```{r}
 library(readxl)
@@ -114,7 +114,9 @@ library(RSQLite)
 
 ---
 
-## Data Schema Matters
+# 什麼是資料第二問：資料「應該」長怎樣？
+
+Data Schema Matters！
 
 資料結構是重要的
 
@@ -172,22 +174,22 @@ head(stockMajor)
 
 ---
 
-## 基本資料讀寫
+# 基本資料讀寫
 
 我今天拿到一個文字檔案
 
 首先，觀察檔案的格式、欄位、資料型態
 
-### 利用 `readLines`，先把前幾行資料讀進來觀察
+## 利用 `readLines`，先把前幾行資料讀進來觀察
 
 ```{r}
 res <- readLines(con = "data/cl_info_other.csv", n = 10L, encoding = "BIG-5")
 head(res)
 ```
 
-其他都可以忘記，至少要記得 `read.table`
+## 其他都可以忘記，至少要記得 `read.table`
 
-利用 `colClasses` 指定資料中欄位的大小及資料型態，讓讀檔速度加快（執行時不用去猜資料的大小、格式與資料型態）
+## 利用 `colClasses` 指定資料中欄位的大小及資料型態，讓讀檔速度加快（執行時不用去猜資料的大小、格式與資料型態）
 
 ```{r}
 # library(RCurl)
@@ -198,7 +200,7 @@ head(Cl_info)
 str(Cl_info)
 ```
 
-使用 `write.table` 寫資料
+## 使用 `write.table` 寫資料
 
 ```{r, eval=FALSE}
 write.table(x = Cl_info, file = "data/cl_info_other.csv", sep = ",", quote = FALSE)
@@ -216,11 +218,11 @@ write.table(x = Cl_info, file = "data/cl_info_other.csv", sep = ",", quote = FAL
 
 ---
 
-## 處理 Excel 資料
+# 處理 Excel 資料
 
-### Excel 不等於 Table!
+## Excel 不等於 Table！
 
-### - `gdata`
+## - `gdata`
 
 [在 Windows 系統中需要另外安裝 Perl](https://cran.r-project.org/web/packages/gdata/INSTALL)
 
@@ -229,7 +231,7 @@ write.table(x = Cl_info, file = "data/cl_info_other.csv", sep = ",", quote = FAL
 library(gdata)
 ```
 
-### - `XLConnect` and `xlsx`
+## - `XLConnect` and `xlsx`
 
 需要 `rJava`，另外在處理中文編碼時需要使用 `iconv` 輔助。
 
@@ -239,7 +241,7 @@ library(XLConnect)
 library(xlsx)
 ```
 
-### - `readxl`
+## - `readxl`
 
 Made by Hadley 品質保證，powerd by `RCpp`
 
@@ -252,15 +254,13 @@ library(readxl)
 
 ---
 
-## 觀察
+# 觀察
 
 首先，觀察檔案的格式、欄位、資料型態
 
-### 利用 `readLines`，先把前幾行資料讀進來觀察
+## 利用 `readxl:::xlsx_col_types` 觀察資料中欄位的大小及資料型態，讓讀檔速度加快（執行時不用去猜資料的大小、格式與資料型態）
 
-### 利用 `readxl:::xlsx_col_types` 觀察資料中欄位的大小及資料型態，讓讀檔速度加快（執行時不用去猜資料的大小、格式與資料型態）
-
-### 使用 `readxl::excel_sheets` 取得 Excel 檔案的表單資訊（sheet），再用 `readxl::read_excel` 讀檔（較快）
+## 使用 `readxl::excel_sheets` 取得 Excel 檔案的表單資訊（sheet），再用 `readxl::read_excel` 讀檔
 
 ```{r}
 # library(readxl)
@@ -270,33 +270,158 @@ sheetNames
 colTypes <- readxl:::xlsx_col_types(path = filename, nskip = 10, n = 1)
 colTypes
 resxl <- readxl::read_excel(filename, sheet = sheetNames[1], col_names = FALSE, skip = 8, col_types = colTypes)
-colnames(resxl) <- c("金融機構名稱", "流通卡數", "有效卡數", "當月發卡數", "當月停卡數", "循環信用餘額", "未到期分期付款餘額", "當月簽帳金額", "當月預借現金金額", "逾期三個月以上帳款占應收帳款餘額(含催收款)之比率", "逾期六個月以上帳款占應收帳款餘額(含催收款)之比率", "備抵呆帳提足率", "當月轉銷呆帳金額", "當年度轉銷呆帳金額累計至資料月份")
+colnames(resxl) <- c("金融機構名稱", "流通卡數", "有效卡數", "當月發卡數", "當月停卡數", "循環信用餘額", "未到期分期付款餘額", "當月簽帳金額", "當月預借現金金額", "逾期三個月以上帳款占應收帳款餘額含催收款之比率", "逾期六個月以上帳款占應收帳款餘額含催收款之比率", "備抵呆帳提足率", "當月轉銷呆帳金額", "當年度轉銷呆帳金額累計至資料月份")
+dataLength <- sum(1 - is.na(resxl$流通卡數))
+resxl <- resxl[1:dataLength,]
 # colnames(resxl) <- iconv(colnames(resxl), 'utf8', 'big5')
 str(resxl)
 # View(resxl)
 ```
 
+## 大量同樣格式的檔案，包成 `function` 批次執行。
+
+```{r}
+setwd("./data/")
+filenames <- dir(pattern = "*.xlsx")
+readCreditExcel <- function(filename) {
+  sheetNames <- readxl::excel_sheets(filename)
+  colTypes <- readxl:::xlsx_col_types(path = filename, nskip = 10, n = 1)
+  resxl <- readxl::read_excel(filename, sheet = sheetNames[1], col_names = FALSE, skip = 8, col_types = colTypes)
+  colnames(resxl) <- c("金融機構名稱", "流通卡數", "有效卡數", "當月發卡數", "當月停卡數", "循環信用餘額", "未到期分期付款餘額", "當月簽帳金額", "當月預借現金金額", "逾期三個月以上帳款占應收帳款餘額含催收款之比率", "逾期六個月以上帳款占應收帳款餘額含催收款之比率", "備抵呆帳提足率", "當月轉銷呆帳金額", "當年度轉銷呆帳金額累計至資料月份")
+  dataLength <- sum(1 - is.na(resxl$流通卡數))
+  resxl <- resxl[1:dataLength,]
+  resxl <- cbind(月份 = substr(filename, 1, 5), resxl)
+  return(resxl)
+}
+creditData <- lapply(filenames, readCreditExcel)
+creditData <- do.call("rbind", creditData)
+# View(creditData)
+setwd("../")
+```
+
 ---
 
-## dplyr
+# dplyr
 
 接下來，真正開始用 R 來做 ETL 資料清理的工作。
 
-### 簡介 `dplyr`
+## 簡介 `dplyr`
 
-- 讓 R 使用者可以用更有彈性的方式來處理資料
+官方的學習文件：`vignette`
 
-- 針對 data.frame 做設計（名稱中的 d）
+```{r, eval=FALSE}
+# library(dplyr)
+vignette(all = TRUE, package = "dplyr")
+vignette("introduction", package = "dplyr")
+```
 
-- 設計理念
+### - 讓 R 使用者可以用更有彈性的方式來處理資料
+
+### - 針對 data.frame 做設計（名稱中的 d）
+
+### - 設計理念
     + 導入資料整理最重要的操作（非常類似 SQL）
     + 快速與方便
     + 支援異質資料源（data.frame 或資料庫中的表格）
 
 <!-- end of list -->
 
+## dplyr 快速簡介
+
+### - `select` 對欄位做篩選
+
+### - `filter` 對資料列做篩選
+
+### - `mutate` 變更或新增欄位
+
+### - `arrange` 排序、排列
+
+### - `group_by` + `summarise` 分類
+
+### - `bind` 合併資料表
+
+<!-- end of list -->
+
+---
+
+## `select`
+
+### `Cl_demo1 = select(資料表, 欄位1, 欄位2, 欄位3)`
+
+### 對應的 SQL 語法：
+`select data_dt, bank_nm, mortgage_bal from Cl_info ;`
+
 ```{r}
-# library(dplyr)
+# Example 1: select
+Cl_demo1 = select(Cl_info, data_dt, bank_nm, mortgage_bal)
+head(Cl_demo1)
+```
+
+## `filter`
+
+### `Cl_demo2 = filter(Cl_info, mortgage_bal > 1000000)`
+
+### 對應的 SQL 語法：
+`select * from Cl_info where mortgage > 1000000 ;`
+
+```{r}
+# Example 2: filter
+Cl_demo2 = filter(Cl_info, mortgage_bal > 1000000)
+head(Cl_demo2)
+```
+
+## `mutate`
+
+### `Cl_demo3 = mutate(資料表, 新欄位名 = 運算式)`
+
+### 對應的 SQL 語法：
+`select mortgage_bal/1000000 as mortage from Cl_info ;`
+
+```{r}
+# Example 3: mutate
+Cl_demo3 = mutate(Cl_info, mortage = mortgage_bal/1000000)
+head(Cl_demo3)
+```
+
+## `arrange`
+
+### `Cl_demo4 = arrange(資料表, 欄位1, desc(欄位2)))`
+
+### 對應的 SQL 語法：
+`select * from Cl_info order by mortage, data_dt desc ;`
+
+```{r}
+# Example 4: arrange
+Cl_demo4 = arrange(Cl_info, mortgage_bal, desc(data_dt))
+head(Cl_demo4)
+```
+
+## `group_by` + `summarise`
+
+### `Cl_demo5 = summarise(group_by(資料表, 用以分組的欄位), 彙總欄位)`
+
+### 對應的 SQL 語法：
+`select mean(mortgage_cnt) from Cl_info group by bank_nm ;`
+
+```{r}
+# Example 5: group_by + summarise
+Cl_demo5 = summarise(group_by(Cl_info, bank_nm), mean(mortgage_cnt))
+head(Cl_demo5)
+```
+
+---
+
+## 實際拿剛才的 EXCEL 資料來處理
+
+```{r}
+# Example:
+
+try <- select(creditData, 金融機構名稱, 月份, 流通卡數, 有效卡數, 當月發卡數, 當月停卡數, 逾期三個月以上帳款占應收帳款餘額含催收款之比率) %>% filter(金融機構名稱 == "臺灣銀行")
+
+# 圖還要修！
+plot(try$月份, try$流通卡數)
+lines(try$月份, try$流通卡數)
+
 ```
 
 回頭來看 Yahoo Stock 的資料
