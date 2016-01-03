@@ -94,21 +94,13 @@ nrow(iris)
 
 ### - `readLine` | `read.table`
 
-### - `readxl`
+### - `readxl` | `xlsx` | `XLConnect` | `iconv`
 
 ### - `magrittr`
 
 ### - `dplyr` | `reshape2`
 
-### - `RSQLite`
-
-```{r}
-library(readxl)
-library(magrittr)
-library(dplyr)
-library(reshape2)
-library(RSQLite)
-```
+### - `RSQLite` | `DBI`
 
 <!-- end of list -->
 
@@ -164,39 +156,20 @@ data_table
 
 ## 基本資料讀寫
 
-我今天拿到一個文字檔案
-
-首先，觀察檔案的格式、欄位、資料型態
-
-### 利用 `readLines`，先把前幾行資料讀進來觀察
-
-```{r}
-res <- readLines(con = "data/cl_info_other.csv", n = 10L, encoding = "BIG-5")
-head(res)
-```
-
 其他都可以忘記，至少要記得 `read.table`
 
-利用 `colClasses` 指定資料中欄位的大小及資料型態，讓讀檔速度加快（執行時不用去猜資料的大小、格式與資料型態）
-
 ```{r}
-# library(RCurl)
-# Cl_info = read.table(sep=",", header=TRUE, stringsAsFactors=F, file=textConnection(getURL("https://raw.githubusercontent.com/suensummit/RCourseBankSinoPac/gh-pages/data/cl_info_other.csv")))
+library(RCurl)
+Cl_info = read.table(sep=",", header=TRUE, stringsAsFactors=F, file=textConnection(getURL("https://raw.githubusercontent.com/ntuaha/R_ETL_DSC_2015/gh-pages/cl_info_other.csv")))
 
-Cl_info = read.table(file = "data/cl_info_other.csv", sep = ",", stringsAsFactors = F, header = T, colClasses = c("character", "integer", "Date", "character", "Date", "character", "integer", "numeric", "integer", "numeric", "integer", "numeric", "integer", "numeric", "integer", "numeric"))
+# Cl_info = read.table(file="./cl_info_other.csv",sep=",",stringsAsFactors=F,header=T)
+
 head(Cl_info)
-str(Cl_info)
-```
-
-使用 `write.table` 寫資料
-
-```{r, eval=FALSE}
-write.table(x = Cl_info, file = "data/cl_info_other.csv", sep = ",", quote = FALSE)
 ```
 
 [銀行局](https://survey.banking.gov.tw/statis/stmain.jsp?sys=100&funid=r100)
 
-- 範例：房貸餘額 [csv](https://raw.githubusercontent.com/suensummit/RCourseBankSinoPac/gh-pages/data/cl_info_other.csv)
+- 範例：房貸餘額 csv
 
 - 練習：
 
@@ -248,22 +221,77 @@ library(readxl)
 
 ### 利用 `readLines`，先把前幾行資料讀進來觀察
 
-### 利用 `readxl:::xlsx_col_types` 觀察資料中欄位的大小及資料型態，讓讀檔速度加快（執行時不用去猜資料的大小、格式與資料型態）
+```{r}
+filename <- "data/29010.xls"
+filename <- "data/10401信用卡重要資訊揭露.xlsx"
+raw <- readLines(filename, n = 10L, encoding = "BIG-5", warn = FALSE)
+raw <- iconv(raw, from = "BIG-5", to = "UTF-8")
 
-### 使用 `readxl::excel_sheets` 取得 Excel 檔案的表單資訊（sheet），再用 `readxl::read_excel` 讀檔（較快）
+```
+
+### 預先設定欄位的大小及資料型態 `colClasses`，讓讀檔速度加快（執行時不用去猜資料的大小、格式與資料型態）
+
+### 一般來說，使用 `XLConnect::existsSheet` 取得 Excel 檔案的表單資訊（sheet），再用 `xlsx::read.xlsx2` 讀檔（較快）
 
 ```{r}
-# library(readxl)
+library(xlsx)
+library(magrittr)
+filename <- "data/29010.xls"
 filename <- "data/10401信用卡重要資訊揭露.xlsx"
-sheetNames <- readxl::excel_sheets(filename)
-sheetNames
-colTypes <- readxl:::xlsx_col_types(path = filename, nskip = 10, n = 1)
-colTypes
-resxl <- readxl::read_excel(filename, sheet = sheetNames[1], col_names = FALSE, skip = 8, col_types = colTypes)
-colnames(resxl) <- c("金融機構名稱", "流通卡數", "有效卡數", "當月發卡數", "當月停卡數", "循環信用餘額", "未到期分期付款餘額", "當月簽帳金額", "當月預借現金金額", "逾期三個月以上帳款占應收帳款餘額(含催收款)之比率", "逾期六個月以上帳款占應收帳款餘額(含催收款)之比率", "備抵呆帳提足率", "當月轉銷呆帳金額", "當年度轉銷呆帳金額累計至資料月份")
-# colnames(resxl) <- iconv(colnames(resxl), 'utf8', 'big5')
+credit_rownames <- read.xlsx2(filename, sheetIndex = 1, startRow = 4, endRow = 8, as.data.frame = TRUE, header = FALSE, colClasses = c("character", "character", "character", "character"))
+credit_10401 <- read.xlsx2(filename, sheetIndex = 1, startRow = 9, endRow = 45, as.data.frame = TRUE, header = FALSE, colClasses = c("text", "integer", "integer", "integer", "integer", "integer", "integer", "integer", "integer", "numeric", "numeric", "numeric", "integer", "integer"))
+# 放 View 的 table 截圖
+# View(credit_10401)
+str(credit_10401)
+# as.character(credit_10401[1,][7][[1]])
+# as.character(credit_10401[1:4,][7][[1]])
+# paste0(as.character(credit_10401[1:4,][7][[1]]))
+# as.character(credit_10401[4,])
+# colnames(credit_10401) <- as.character(credit_10401[4,])
+# credit_10401 <- credit_10401[8:45,]
+# 放 View 的 table 截圖
+credit_10401_2 <- credit_10401
+credit_10401_2[-1] <- lapply(credit_10401[-1], as.character)
+credit_10401_2[-1] <- lapply(credit_10401_2[-1], as.numeric)
+# View(credit_10401_2)
+str(credit_10401_2)
+row.names(credit_10401) <- NULL
+```
+
+```{r}
+library(XLConnect)
+filename <- "data/29010.xls"
+wb = XLConnect::loadWorkbook(filename = filename)
+data = XLConnect::readWorksheet(wb, sheet = "9-1")
+head(data)
+str(data)
+data2 <- data[seq(from = 13, to = 35, by = 2),]
+head(data2)
+str(data2)
+```
+
+```{r}
+library(readxl)
+filename <- "data/29010.xls"
+filename <- "data/10401信用卡重要資訊揭露.xlsx"
+sheetNames <- excel_sheets(filename)
+readxl:::xlsx_col_types(path = filename, nskip = 10, n = 1)
+```
+
+```{r, echo=FALSE}
+resxl <- read_excel(filename, sheet = sheetNames[1], col_names = TRUE, skip = 4)
+```
+
+```{r}
+resxl <- resxl[4:41,]
+resxl[-1] <- lapply(resxl[-1], as.numeric)
+# colnames(resxl)=iconv(colnames(resxl),'utf8','big5')
 str(resxl)
+# barplot(height = resxl$流通卡數, names.arg = resxl$金融機構名稱)
 # View(resxl)
+# resxl_2 <- read_excel(filename, sheet = 2, col_names = FALSE)
+# View(resxl_2)
+# str(resxl_2)
 ```
 
 ---
@@ -275,9 +303,12 @@ str(resxl)
 ### 簡介 `dplyr`
 
 ```{r}
-# library(dplyr)
-ls()
+library(dplyr)
 ```
+
+### 延伸 `data.table`
+
+### 延伸 `rlist`
 
 ---
 
