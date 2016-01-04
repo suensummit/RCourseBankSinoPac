@@ -16,17 +16,17 @@ output:
 ---
 
 # 第一堂 `2015/12/18`：Ｒ語言網路爬蟲
-## - [投影片](https://goo.gl/48WIU4) 
-## - [講義](http://whizzalan.github.io/RCrawlerCrashCourse/)
+- ## [投影片](https://goo.gl/48WIU4) 
+- ## [講義](http://whizzalan.github.io/RCrawlerCrashCourse/)
 
 # 第二堂 `2016/01/04`：Ｒ語言資料清理
-## - [講義](./week2handouts.html)
+- ## [講義](./week2handouts.html)
 
 # 第三堂 `2016/01/13`：Ｒ語言視覺化與報表製作
-## - [講義]()
+- ## [講義]()
 
 # 第四堂 `2016/01/29`：Ｒ語言資料分析初探
-## - [講義](./week4handouts.html)
+- ## [講義](./week4handouts.html)
 
 ---
 

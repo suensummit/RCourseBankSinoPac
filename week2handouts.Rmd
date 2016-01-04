@@ -27,13 +27,13 @@ output:
 
 # 1.1 ＥＴＬ資料清理
 
-## - 什麼時候需要做資料清理？
+- ## 什麼時候需要做資料清理？
 
-## - 其實 ETL 距離日常生活沒有這麼遙遠，在平常工作中會使用到 SQL、Excel 等等來進行報表製作，而將原始資料整理成報表裡面的結構化資料，就是 ETL。
+- ## 其實 ETL 距離日常生活沒有這麼遙遠，在平常工作中會使用到 SQL、Excel 等等來進行報表製作，而將原始資料整理成報表裡面的結構化資料，就是 ETL。
 
-## [E] Extract [T] Transform [L] Load
+- ## [Ｅ] `Extract` [Ｔ] `Transform` [Ｌ] `Load`
 
-## 上完這堂課，你會學到：
+- ## 上完這堂課，你會學到：
 
 ![](./img/R_ETL_SCOPE.png)
 
@@ -41,26 +41,40 @@ output:
 
 ---
 
-# 1.2 今天會用到的套件 `packages` 與重要函式 `functions`
+# 1.2 重要套件 `packages` 與函式 `functions`
+
+- ## `readLine` | `read.table`
+
+```{r}
+?readLines
+?read.table
+```
+
+- ## `XLConnect` | `xlsx`
 
 ```{r}
 library(XLConnect)
 library(xlsx)
-library(readxl)
-library(magrittr)
-library(dplyr)
-library(RSQLite)
 ```
 
-## - `readLine` | `read.table`
+- ## `readxl`
 
-## - `XLConnect` | `xlsx`
+```{r}
+library(readxl)
+```
 
-## - `readxl`
+- ## `magrittr` | `dplyr`
 
-## - `magrittr` | `dplyr`
+```{r}
+library(magrittr)
+library(dplyr)
+```
 
-## - `RSQLite`
+- ## `RSQLite`
+
+```{r}
+library(RSQLite)
+```
 
 <!-- end of list -->
 
@@ -68,11 +82,11 @@ library(RSQLite)
 
 # 1.3 範例資料準備
 
-## 1. 打開 `shell` 輸入指令下載資料集
+- ## 1. 打開 `shell` 輸入指令下載資料集
 
-`git clone https://github.com/suensummit/RCourseBankSinoPac.git`
+    `git clone https://github.com/suensummit/RCourseBankSinoPac.git`
 
-## 2. 在 RStudio console 輸入指令，切換工作目錄並確認下載內容。
+- ## 2. 在 RStudio console 輸入指令，切換工作目錄並確認下載內容。
 
 ```{r, eval=FALSE}
 setwd("RCourseBankSinoPac")
@@ -87,9 +101,9 @@ dir()
 
 # 1.4 環境設定： `rJava` 安裝
 
-在 Windows 系統裡使用 R，有時候會遇到一些棘手的 error；其中除了跟系統編碼（顯示亂碼）相關的問題以外，有一大宗都跟 `rJava` 這個套件有關。
+- 在 Windows 系統裡使用 R，有時候會遇到一些棘手的 error；其中除了跟系統編碼（顯示亂碼）相關的問題以外，有一大宗都跟 `rJava` 這個套件有關。
 
-今天先帶領大家操作一次，當遇到問題時，可以如何去解決。
+- 今天先帶領大家操作一次，當遇到問題時，可以如何去解決。
 
 ```{r}
 library(rJava)
@@ -107,21 +121,21 @@ library(rJava)
 
 ## 練習操作：複習Ｒ語法
 
-小提示 Tips
+### 小提示 Tips
 
-- 工作目錄 working directory
-    - `getwd`
-    - `setwd`
-    - `dir`
+- ### 工作目錄 working directory
+    - #### `getwd`
+    - #### `setwd`
+    - #### `dir`
    
-- 自動補齊 autocompletion
-    - `tab`
+- ### 自動補齊 autocompletion
+    - #### `tab`
 
-- 執行命令 source
-    - `control` + `enter`
+- ### 執行命令 source
+    - #### `control` + `enter`
 
-- 註解增減 comment
-    - `shift` + `control` + `c`
+- ### 註解增減 comment
+    - #### `shift` + `control` + `c`
 
 <!-- end of list -->
 
@@ -155,17 +169,17 @@ nrow(Batting)
 
 ![](./img/PCHOME.png)
 
-### Data Schema Matters！
+- ### Data Schema Matters！
 
-### 資料結構是重要的
+- ### 資料結構是重要的
 
 ## 2.1.1 以第一週 Yahoo Stock 資料為例
 
 ![](./img/YAHOO_STOCK.png)
 
-### [2330 台積電](http://tw.stock.yahoo.com/d/s/major_2330.html)
+- ### [2330 台積電](http://tw.stock.yahoo.com/d/s/major_2330.html)
 
-```{r}
+```{r, eval=FALSE}
 library(httr)
 library(rvest)
 
@@ -195,13 +209,13 @@ data_table
 
 ## 2.1.2 想想看，這樣的資料有什麼問題？
 
-### 左右兩欄的表格應該整併成同一欄
+- ### 左右兩欄的表格應該整併成同一欄
 
-### 並且加入時間欄位、股票名稱
+- ### 並且加入時間欄位、股票名稱
 
-### 才能塞進資料庫／檔案做儲存或進一步應用
+- ### 才能塞進資料庫／檔案做儲存或進一步應用
 
-```{r}
+```{r, eval=FALSE}
 head(data_table)
 colnames(data_table) <- c("券商", "買進", "賣出", "差距", "券商", "買進", "賣出", "差距")
 stockMajor <- rbind(data_table[,1:4], data_table[,5:8])
@@ -213,7 +227,7 @@ head(stockMajor)
 
 ### 練習：Yahoo Stock
 
-### [2451 創見](http://tw.stock.yahoo.com/d/s/major_2451.html)
+- ### [2451 創見](http://tw.stock.yahoo.com/d/s/major_2451.html)
 
 <!-- end of list -->
 
@@ -223,7 +237,7 @@ head(stockMajor)
 
 ![](./img/R_ETL_SCOPE_1.png)
 
-### 我今天拿到一個文字檔案
+- ### 我今天拿到一個文字檔案
 
 - 範例：[銀行局](https://survey.banking.gov.tw/statis/stmain.jsp?sys=100&funid=r100) 房貸餘額 [csv](https://raw.githubusercontent.com/suensummit/RCourseBankSinoPac/gh-pages/data/cl_info_other.csv)
 
@@ -233,9 +247,9 @@ head(stockMajor)
 
 ## 2.2.1 取得資料後的第一步，是「觀察」
 
-### 首先，觀察檔案的格式、欄位、資料型態
+- ### 首先，觀察檔案的格式、欄位、資料型態
 
-### 利用 `readLines`，先把前幾筆資料讀進來觀察
+- ### 利用 `readLines`，先把前幾筆資料讀進來觀察
 
 ```{r}
 res <- readLines(con = "data/cl_info_other.csv", n = 10L, encoding = "BIG-5")
@@ -247,11 +261,11 @@ head(res)
 
 ---
 
-### 其他都可以忘記，至少要記得 `read.table`
+- ### 其他都可以忘記，至少要記得 `read.table`
 
 ## 2.2.2 利用觀察的結果「提供資訊」增進讀檔的效率
 
-### 利用 `colClasses` 指定資料中欄位的大小及資料型態，讓讀檔速度加快（執行時不用去猜資料的大小、格式與資料型態）
+- ### 利用 `colClasses` 指定資料中欄位的大小及資料型態，讓讀檔速度加快（執行時不用去猜資料的大小、格式與資料型態）
 
 ```{r}
 # library(RCurl)
@@ -262,15 +276,15 @@ head(Cl_info)
 str(Cl_info)
 ```
 
-### - 輸出形態為 Data Frame
+- ### 輸出形態為 Data Frame
 
-### - `file` 就是指讀入的檔案路徑
+- ### `file` 就是指讀入的檔案路徑
 
-### - `sep` 指的是欄位分割用的符號,通常 csv 檔案格式是透過,做分割
+- ### `sep` 指的是欄位分割用的符號,通常 csv 檔案格式是透過,做分割
 
-### - stringsAsFactors 預設是 `True`， 讓讀入的字串用 `factor` 儲存，那麼資料就會轉為整數儲存與對照表
+- ### stringsAsFactors 預設是 `True`， 讓讀入的字串用 `factor` 儲存，那麼資料就會轉為整數儲存與對照表
 
-### - header 預設是 `False`，表示第一行是不是表格標頭，輸出的 data.frame 欄位名的 `colnames`
+- ### header 預設是 `False`，表示第一行是不是表格標頭，輸出的 data.frame 欄位名的 `colnames`
 
 <!-- end of list -->
 
@@ -278,7 +292,7 @@ str(Cl_info)
 
 ## 2.2.3 
 
-### 使用 `write.table` 寫資料
+- ### 使用 `write.table` 寫資料
 
 ```{r, eval=FALSE}
 write.table(x = Cl_info, file = "data/cl_info_other_update.csv", sep = ",", quote = FALSE)
@@ -292,13 +306,13 @@ write.table(x = Cl_info, file = "data/cl_info_other_update.csv", sep = ",", quot
 
 ![](./img/R_ETL_SCOPE_2.png)
 
-## Excel 不等於 Table！
+- ## Excel 不等於 Table！
 
 ![](./img/EXCEL.png)
 
 ## (a) `gdata`
 
-### [在 Windows 系統中需要另外安裝 Perl](https://cran.r-project.org/web/packages/gdata/INSTALL)
+- ### [在 Windows 系統中需要另外安裝 Perl](https://cran.r-project.org/web/packages/gdata/INSTALL)
 
 ```{r}
 ## Need Perl on Windows
@@ -307,7 +321,7 @@ library(gdata)
 
 ## (b) `XLConnect` and `xlsx`
 
-### 需要 `rJava`，另外在處理中文編碼時需要使用 `iconv` 輔助。
+- ### 需要 `rJava`，另外在處理中文編碼時需要使用 `iconv` 輔助。
 
 ```{r}
 ## Need Java/rJava
@@ -317,7 +331,7 @@ library(xlsx)
 
 ## (c) `readxl`
 
-### [Hadley](https://github.com/hadley) 出品，開發中，可搭配 `dplyr`（`tbl` 物件）
+- ### [Hadley](https://github.com/hadley) 出品，開發中，可搭配 `dplyr`（`tbl` 物件）
 
 ```{r}
 ## No dependency
@@ -330,21 +344,21 @@ library(readxl)
 
 ## 2.3.1 觀察
 
-### 首先，觀察檔案的格式、欄位、資料型態
+- ### 首先，觀察檔案的格式、欄位、資料型態
 
 ![](./img/EXCEL.png)
 
 ## 複習一下
 
-### `套件::函式（public）`
+- ### `套件::函式（public）`
 
-### `套件:::函式（private）`
+- ### `套件:::函式（private）`
 
 ![](./img/PACKAGE_1.png)
 
 ![](./img/PACKAGE_2.png)
 
-## c-1 使用 `readxl::excel_sheets` 取得 Excel 檔案的表單資訊（sheet）
+- ### c-1 使用 `readxl::excel_sheets` 取得 Excel 檔案的表單資訊（sheet）
 
 ```{r}
 # library(readxl)
@@ -353,14 +367,14 @@ sheetNames <- readxl::excel_sheets(filename)
 sheetNames
 ```
 
-## c-2 利用 `readxl:::xlsx_col_types` 觀察資料中欄位的大小及資料型態，讓讀檔速度加快（執行時不用去猜資料的大小、格式與資料型態）
+- ### c-2 利用 `readxl:::xlsx_col_types` 觀察資料中欄位的大小及資料型態，讓讀檔速度加快（執行時不用去猜資料的大小、格式與資料型態）
 
 ```{r}
 colTypes <- readxl:::xlsx_col_types(path = filename, nskip = 10, n = 1)
 colTypes
 ```
 
-## c-3 再用 `readxl::read_excel` 讀檔、`xlsx::write.xlsx2` 寫檔
+- ### c-3 再用 `readxl::read_excel` 讀檔、`xlsx::write.xlsx2` 寫檔
 
 ```{r}
 resxl <- readxl::read_excel(filename, sheet = sheetNames[1], col_names = FALSE, skip = 8, col_types = colTypes)
@@ -406,11 +420,11 @@ setwd("../")
 
 ![](./img/R_ETL_SCOPE_3.png)
 
-接下來，真正開始在 R 裡面來做 ETL AKA 資料清理的工作。
+- ### 接下來，真正開始在 R 裡面來做 ETL 資料清理的工作。
 
 ## 簡介 `dplyr`
 
-官方的學習文件：`vignette`
+- ### 官方的學習文件：`vignette`
 
 ```{r, eval=FALSE}
 library(dplyr)
@@ -418,14 +432,14 @@ vignette(all = TRUE, package = "dplyr")
 vignette("introduction", package = "dplyr")
 ```
 
-### - 讓 R 使用者可以用更有彈性的方式來處理資料
+- ### 讓 R 使用者可以用更有彈性的方式來處理資料
 
-### - 針對 data.frame 做設計（名稱中的 d）
+- ### 針對 data.frame 做設計（名稱中的 d）
 
-### - 設計理念
-    + 導入資料整理最重要的操作（非常類似 SQL）
-    + 快速與方便
-    + 支援異質資料源（data.frame 或資料庫中的表格）
+- ### 設計理念
+    + ### 導入資料整理最重要的操作（非常類似 SQL）
+    + ### 快速與方便
+    + ### 支援異質資料源（`data.frame` 或資料庫中的表格 `tbl  `）
 
 <!-- end of list -->
 
@@ -433,17 +447,17 @@ vignette("introduction", package = "dplyr")
 
 ## dplyr 快速簡介
 
-### - `select` 對欄位做篩選
+- ### `select` 對欄位做篩選
 
-### - `filter` 對資料列做篩選
+- ### `filter` 對資料列做篩選
 
-### - `mutate` 變更或新增欄位
+- ### `mutate` 變更或新增欄位
 
-### - `arrange` 排序、排列
+- ### `arrange` 排序、排列
 
-### - `group_by` + `summarise` 分類
+- ### `group_by` + `summarise` 分類
 
-### - `bind` 合併資料表
+- ### `bind` 合併資料表
 
 <!-- end of list -->
 
@@ -451,9 +465,9 @@ vignette("introduction", package = "dplyr")
 
 ## 3.1.1 `select`
 
-### `Cl_demo1 = select(資料表, 欄位1, 欄位2, 欄位3)`
+- ### `Cl_demo1 = select(資料表, 欄位1, 欄位2, 欄位3)`
 
-### 對應的 SQL 語法：
+- ### 對應的 SQL 語法：
 `select data_dt, bank_nm, mortgage_bal from Cl_info ;`
 
 ```{r}
@@ -468,9 +482,9 @@ head(Cl_demo1)
 
 ## 3.1.2 `filter`
 
-### `Cl_demo2 = filter(Cl_info, mortgage_bal > 1000000)`
+- ### `Cl_demo2 = filter(Cl_info, mortgage_bal > 1000000)`
 
-### 對應的 SQL 語法：
+- ### 對應的 SQL 語法：
 `select * from Cl_info where mortgage > 1000000 ;`
 
 ```{r}
@@ -485,9 +499,9 @@ head(Cl_demo2)
 
 ## 3.1.3 `mutate`
 
-### `Cl_demo3 = mutate(資料表, 新欄位名 = 運算式)`
+- ### `Cl_demo3 = mutate(資料表, 新欄位名 = 運算式)`
 
-### 對應的 SQL 語法：
+- ### 對應的 SQL 語法：
 `select mortgage_bal/1000000 as mortage from Cl_info ;`
 
 ```{r}
@@ -502,9 +516,9 @@ head(Cl_demo3)
 
 ## 3.1.4 `arrange`
 
-### `Cl_demo4 = arrange(資料表, 欄位1, desc(欄位2)))`
+- ### `Cl_demo4 = arrange(資料表, 欄位1, desc(欄位2)))`
 
-### 對應的 SQL 語法：
+- ### 對應的 SQL 語法：
 `select * from Cl_info order by mortage, data_dt desc ;`
 
 ```{r}
@@ -519,9 +533,9 @@ head(Cl_demo4)
 
 ## 3.1.5 `group_by` + `summarise`
 
-### `Cl_demo5 = summarise(group_by(資料表, 用以分組的欄位), 彙總欄位)`
+- ### `Cl_demo5 = summarise(group_by(資料表, 用以分組的欄位), 彙總欄位)`
 
-### 對應的 SQL 語法：
+- ### 對應的 SQL 語法：
 `select mean(mortgage_cnt) from Cl_info group by bank_nm ;`
 
 ```{r}
@@ -536,16 +550,13 @@ head(Cl_demo5)
 
 # 3.2 範例演練
 
-實際拿剛才的 EXCEL 資料來處理
+- 實際拿剛才的 EXCEL 資料來處理
 
-```{r, eval=FALSE}
+```{r}
 # Example:
-try <- select(creditData, 金融機構名稱, 月份, 流通卡數, 有效卡數, 當月發卡數, 當月停卡數, 逾期三個月以上帳款占應收帳款餘額含催收款之比率)
+creditDataCompete <- select(creditData, 金融機構名稱, 月份, 流通卡數, 有效卡數, 當月發卡數, 當月停卡數, 逾期三個月以上帳款占應收帳款餘額含催收款之比率) %>% mutate(使用率 = (有效卡數/流通卡數)*100, 當月增減 = 當月發卡數 - 當月停卡數) %>% arrange(金融機構名稱)
 
-# 圖還要修！
-library(ggplot2)
-ggplot(try, aes(x = 月份, y = 流通卡數)) + geom_line()
-
+head(creditDataCompete)
 ```
 
 <!-- end of list -->
