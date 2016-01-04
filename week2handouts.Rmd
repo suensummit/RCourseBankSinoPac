@@ -139,8 +139,6 @@ library(rJava)
 
 <!-- end of list -->
 
-<<<<<操作>>>>>
-
 ```{r}
 library(Lahman)
 ## View Data
@@ -179,7 +177,7 @@ nrow(Batting)
 
 - ### [2330 台積電](http://tw.stock.yahoo.com/d/s/major_2330.html)
 
-```{r, eval=FALSE}
+```{r}
 library(httr)
 library(rvest)
 
@@ -215,7 +213,7 @@ data_table
 
 - ### 才能塞進資料庫／檔案做儲存或進一步應用
 
-```{r, eval=FALSE}
+```{r}
 head(data_table)
 colnames(data_table) <- c("券商", "買進", "賣出", "差距", "券商", "買進", "賣出", "差距")
 stockMajor <- rbind(data_table[,1:4], data_table[,5:8])
