@@ -25,23 +25,32 @@ output:
 
 ---
 
-# 1.1 什麼時候需要資料清理
+# 1.1 ＥＴＬ資料清理
 
-## - 
+## - 什麼時候需要做資料清理？
 
-## E = Extract
+## - 其實 ETL 距離日常生活沒有這麼遙遠，在平常工作中會使用到 SQL、Excel 等等來進行報表製作，而將原始資料整理成報表裡面的結構化資料，就是 ETL。
 
-## T = Transform
-
-## L = Load
+## [E] Extract [T] Transform [L] Load
 
 ## 上完這堂課，你會學到：
 
 ![](./img/R_ETL_SCOPE.png)
 
+<!-- end of list -->
+
 ---
 
 # 1.2 今天會用到的套件 `packages` 與重要函式 `functions`
+
+```{r}
+library(XLConnect)
+library(xlsx)
+library(readxl)
+library(magrittr)
+library(dplyr)
+library(RSQLite)
+```
 
 ## - `readLine` | `read.table`
 
@@ -53,14 +62,9 @@ output:
 
 ## - `RSQLite`
 
-```{r}
-library(readxl)
-library(magrittr)
-library(dplyr)
-library(RSQLite)
-```
-
 <!-- end of list -->
+
+---
 
 # 1.3 範例資料準備
 
@@ -79,17 +83,21 @@ dir()
 
 <!-- end of list -->
 
+---
+
 # 1.4 環境設定： `rJava` 安裝
 
 在 Windows 系統裡使用 R，有時候會遇到一些棘手的 error；其中除了跟系統編碼（顯示亂碼）相關的問題以外，有一大宗都跟 `rJava` 這個套件有關。
 
 今天先帶領大家操作一次，當遇到問題時，可以如何去解決。
 
+```{r}
+library(rJava)
+```
+
 - 下載 64 bits 版本的 Java（for Windows）[Download](http://javadl.sun.com/webapps/download/AutoDL?BundleId=113219)
 
-<<<<<截圖>>>>>
-
-<<<<<截圖>>>>>
+![](./img/JAVA.png)
 
 <!-- end of list -->
 
@@ -97,7 +105,7 @@ dir()
 
 # 1.5 暖身
 
-## 練習操作：複習 R 語法
+## 練習操作：複習Ｒ語法
 
 小提示 Tips
 
@@ -121,21 +129,25 @@ dir()
 
 ```{r}
 ## View Data
-head(iris)
-tail(iris)
+
+library(Lahman)
+head(Batting)
+tail(Batting)
 
 ## View(iris)
-summary(iris)
+summary(Batting)
 
-attributes(iris)
-str(iris)
-class(iris)
+# attributes(Batting)
+str(Batting)
+class(Batting)
 
 ## data shape
-dim(iris)
-ncol(iris)
-nrow(iris)
+dim(Batting)
+ncol(Batting)
+nrow(Batting)
 ```
+
+<!-- end of list -->
 
 ---
 
@@ -177,7 +189,11 @@ if (.Platform$OS.type == "windows"){
 data_table
 ```
 
-## 2.1.2 這樣的資料有什麼問題？
+<!-- end of list -->
+
+---
+
+## 2.1.2 想想看，這樣的資料有什麼問題？
 
 ### 左右兩欄的表格應該整併成同一欄
 
@@ -199,15 +215,21 @@ head(stockMajor)
 
 ### [2451 創見](http://tw.stock.yahoo.com/d/s/major_2451.html)
 
+<!-- end of list -->
+
 ---
 
-# 2.2 處理一般文字資料
+# 2.2 一般文字資料處理
 
 ![](./img/R_ETL_SCOPE_1.png)
 
 ### 我今天拿到一個文字檔案
 
 - 範例：[銀行局](https://survey.banking.gov.tw/statis/stmain.jsp?sys=100&funid=r100) 房貸餘額 [csv](https://raw.githubusercontent.com/suensummit/RCourseBankSinoPac/gh-pages/data/cl_info_other.csv)
+
+<!-- end of list -->
+
+---
 
 ## 2.2.1 取得資料後的第一步，是「觀察」
 
@@ -221,6 +243,10 @@ iconv(res,from='utf8',to='big5')
 head(res)
 ```
 
+<!-- end of list -->
+
+---
+
 ### 其他都可以忘記，至少要記得 `read.table`
 
 ## 2.2.2 利用觀察的結果「提供資訊」增進讀檔的效率
@@ -231,7 +257,7 @@ head(res)
 # library(RCurl)
 # Cl_info = read.table(sep=",", header=TRUE, stringsAsFactors=F, file=textConnection(getURL("https://raw.githubusercontent.com/suensummit/RCourseBankSinoPac/gh-pages/data/cl_info_other.csv")))
 
-Cl_info = read.table(file = "data/cl_info_other.csv", sep = ",", stringsAsFactors = F, header = T, colClasses = c("character", "character", "character", "character", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric"), encoding = "BIG-5")
+Cl_info = read.table(file = "data/cl_info_other.csv", sep = ",", stringsAsFactors = F, header = T, colClasses = c("character", "character", "character", "character", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric"), encoding = "utf8")
 head(Cl_info)
 str(Cl_info)
 ```
@@ -246,6 +272,10 @@ str(Cl_info)
 
 ### - header 預設是 `False`，表示第一行是不是表格標頭，輸出的 data.frame 欄位名的 `colnames`
 
+<!-- end of list -->
+
+---
+
 ## 2.2.3 
 
 ### 使用 `write.table` 寫資料
@@ -258,15 +288,17 @@ write.table(x = Cl_info, file = "data/cl_info_other_update.csv", sep = ",", quot
 
 ---
 
-# 2.3 處理 Excel 資料
+# 2.3 ＥＸＣＥＬ資料處理
 
 ![](./img/R_ETL_SCOPE_2.png)
 
 ## Excel 不等於 Table！
 
+
+
 ## - `gdata`
 
-[在 Windows 系統中需要另外安裝 Perl](https://cran.r-project.org/web/packages/gdata/INSTALL)
+### [在 Windows 系統中需要另外安裝 Perl](https://cran.r-project.org/web/packages/gdata/INSTALL)
 
 ```{r}
 ## Need Perl on Windows
@@ -275,7 +307,7 @@ library(gdata)
 
 ## - `XLConnect` and `xlsx`
 
-需要 `rJava`，另外在處理中文編碼時需要使用 `iconv` 輔助。
+### 需要 `rJava`，另外在處理中文編碼時需要使用 `iconv` 輔助。
 
 ```{r}
 ## Need Java/rJava
@@ -285,10 +317,10 @@ library(xlsx)
 
 ## - `readxl`
 
-Made by Hadley 品質保證，powerd by `RCpp`
+### [Hadley](https://github.com/hadley) 出品，開發中，可搭配 `dplyr`（`tbl` 物件）
 
 ```{r}
-##
+## No dependency
 library(readxl)
 ```
 
@@ -296,27 +328,30 @@ library(readxl)
 
 ---
 
-## 觀察
+## 2.3.1 觀察
 
-首先，觀察檔案的格式、欄位、資料型態
+### 首先，觀察檔案的格式、欄位、資料型態
 
-套件::函式（public）
-套件:::函式（private）
+`套件::函式（public）`
+`套件:::函式（private）`
 
-## 利用 `readxl:::xlsx_col_types` 觀察資料中欄位的大小及資料型態，讓讀檔速度加快（執行時不用去猜資料的大小、格式與資料型態）
-
-## 使用 `readxl::excel_sheets` 取得 Excel 檔案的表單資訊（sheet），再用 `readxl::read_excel` 讀檔
+## - a) 使用 `readxl::excel_sheets` 取得 Excel 檔案的表單資訊（sheet）
 
 ```{r}
 # library(readxl)
 filename <- "data/10401信用卡重要資訊揭露.xlsx"
 sheetNames <- readxl::excel_sheets(filename)
 sheetNames
+```
+
+## - b) 利用 `readxl:::xlsx_col_types` 觀察資料中欄位的大小及資料型態，讓讀檔速度加快（執行時不用去猜資料的大小、格式與資料型態）
+
+```{r}
 colTypes <- readxl:::xlsx_col_types(path = filename, nskip = 10, n = 1)
 colTypes
 ```
 
-<<<<<截圖>>>>>
+## - c) 再用 `readxl::read_excel` 讀檔
 
 ```{r}
 resxl <- readxl::read_excel(filename, sheet = sheetNames[1], col_names = FALSE, skip = 8, col_types = colTypes)
@@ -328,7 +363,11 @@ str(resxl)
 # View(resxl)
 ```
 
-## 大量同樣格式的檔案，包成 `function` 批次執行。
+<!-- end of list -->
+
+---
+
+## 2.3.2 大量同樣格式的檔案，包成 `function` 批次執行。
 
 ```{r}
 setwd("./data/")
@@ -351,6 +390,8 @@ setwd("../")
 ```
 
 <<<<<截圖解釋lapply>>>>>
+
+<!-- end of list -->
 
 ---
 
@@ -381,6 +422,8 @@ vignette("introduction", package = "dplyr")
 
 <!-- end of list -->
 
+---
+
 ## dplyr 快速簡介
 
 ### - `select` 對欄位做篩選
@@ -399,7 +442,7 @@ vignette("introduction", package = "dplyr")
 
 ---
 
-## `select`
+## 3.1.1 `select`
 
 ### `Cl_demo1 = select(資料表, 欄位1, 欄位2, 欄位3)`
 
@@ -412,7 +455,11 @@ Cl_demo1 = select(Cl_info, data_dt, bank_nm, mortgage_bal)
 head(Cl_demo1)
 ```
 
-## `filter`
+<!-- end of list -->
+
+---
+
+## 3.1.2 `filter`
 
 ### `Cl_demo2 = filter(Cl_info, mortgage_bal > 1000000)`
 
@@ -425,7 +472,11 @@ Cl_demo2 = filter(Cl_info, mortgage_bal > 1000000)
 head(Cl_demo2)
 ```
 
-## `mutate`
+<!-- end of list -->
+
+---
+
+## 3.1.3 `mutate`
 
 ### `Cl_demo3 = mutate(資料表, 新欄位名 = 運算式)`
 
@@ -438,7 +489,11 @@ Cl_demo3 = mutate(Cl_info, mortage = mortgage_bal/1000000)
 head(Cl_demo3)
 ```
 
-## `arrange`
+<!-- end of list -->
+
+---
+
+## 3.1.4 `arrange`
 
 ### `Cl_demo4 = arrange(資料表, 欄位1, desc(欄位2)))`
 
@@ -451,7 +506,11 @@ Cl_demo4 = arrange(Cl_info, mortgage_bal, desc(data_dt))
 head(Cl_demo4)
 ```
 
-## `group_by` + `summarise`
+<!-- end of list -->
+
+---
+
+## 3.1.5 `group_by` + `summarise`
 
 ### `Cl_demo5 = summarise(group_by(資料表, 用以分組的欄位), 彙總欄位)`
 
@@ -463,6 +522,8 @@ head(Cl_demo4)
 Cl_demo5 = summarise(group_by(Cl_info, bank_nm), mean(mortgage_cnt))
 head(Cl_demo5)
 ```
+
+<!-- end of list -->
 
 ---
 
@@ -480,6 +541,8 @@ ggplot(try, aes(x = 月份, y = 流通卡數)) + geom_line()
 
 ```
 
+<!-- end of list -->
+
 ---
 
 # 3.3 R 與 Database 的串接：以 SQLite 為例
@@ -492,19 +555,19 @@ library(DBI)
 con <- dbConnect(RSQLite::SQLite(), ":memory:")
 
 dbListTables(con)
-dbWriteTable(con, "mtcars", mtcars)
+dbWriteTable(con, "Batting", Batting)
 dbListTables(con)
 
-dbListFields(con, "mtcars")
-dbReadTable(con, "mtcars")
+dbListFields(con, "Batting")
+# dbReadTable(con, "Batting")
 
 # You can fetch all results:
-res <- dbSendQuery(con, "SELECT * FROM mtcars WHERE cyl = 4")
+res <- dbSendQuery(con, "SELECT * FROM Batting WHERE playerID = 'jeterde01'")
 dbFetch(res)
 dbClearResult(res)
 
 # Or a chunk at a time
-res <- dbSendQuery(con, "SELECT * FROM mtcars WHERE cyl = 4")
+res <- dbSendQuery(con, "SELECT * FROM Batting WHERE playerID = 'jeterde01'")
 while(!dbHasCompleted(res)){
   chunk <- dbFetch(res, n = 5)
   print(nrow(chunk))
@@ -516,15 +579,25 @@ dbClearResult(res)
 dbDisconnect(con)
 ```
 
-請大家操作範例資料
+## 補充：[使用 dplyr 與資料庫連接](http://www.inside-r.org/node/230652)
 
-[範例資料簡介](http://mlr.cs.umass.edu/ml/datasets/Bank+Marketing)
+```{r}
+?src_sqlite
+```
 
-[下載範例資料](http://mlr.cs.umass.edu/ml/machine-learning-databases/00222/bank.zip)
+## 請大家操作範例資料
+
+### [範例資料簡介](http://mlr.cs.umass.edu/ml/datasets/Bank+Marketing)
+
+### [下載範例資料](http://mlr.cs.umass.edu/ml/machine-learning-databases/00222/bank.zip)
 
 ```{r}
 res <- read.csv("data/bank/bank-full.csv", header = TRUE, sep = ";")
+head(res)
+str(res)
 ```
+
+<!-- end of list -->
 
 ---
 
@@ -551,8 +624,12 @@ res <- read.csv("data/bank/bank-full.csv", header = TRUE, sep = ";")
 ##    + (2) Query
 ##    + (3) Disconnect
 
+<!-- end of list -->
+
 ---
 
 # 4.2 Q & A
 
 ## - [四周課程列表](./index.html)
+
+<!-- end of list -->
