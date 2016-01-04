@@ -128,17 +128,17 @@ library(rJava)
 <<<<<操作>>>>>
 
 ```{r}
-## View Data
-
 library(Lahman)
+## View Data
 head(Batting)
 tail(Batting)
 
-## View(iris)
+## View(Batting)
 summary(Batting)
 
-# attributes(Batting)
+## explore data structure
 str(Batting)
+str(attributes(Batting))
 class(Batting)
 
 ## data shape
@@ -294,9 +294,9 @@ write.table(x = Cl_info, file = "data/cl_info_other_update.csv", sep = ",", quot
 
 ## Excel 不等於 Table！
 
+![](./img/EXCEL.png)
 
-
-## - `gdata`
+## (a) `gdata`
 
 ### [在 Windows 系統中需要另外安裝 Perl](https://cran.r-project.org/web/packages/gdata/INSTALL)
 
@@ -305,7 +305,7 @@ write.table(x = Cl_info, file = "data/cl_info_other_update.csv", sep = ",", quot
 library(gdata)
 ```
 
-## - `XLConnect` and `xlsx`
+## (b) `XLConnect` and `xlsx`
 
 ### 需要 `rJava`，另外在處理中文編碼時需要使用 `iconv` 輔助。
 
@@ -315,7 +315,7 @@ library(XLConnect)
 library(xlsx)
 ```
 
-## - `readxl`
+## (c) `readxl`
 
 ### [Hadley](https://github.com/hadley) 出品，開發中，可搭配 `dplyr`（`tbl` 物件）
 
@@ -332,10 +332,19 @@ library(readxl)
 
 ### 首先，觀察檔案的格式、欄位、資料型態
 
-`套件::函式（public）`
-`套件:::函式（private）`
+![](./img/EXCEL.png)
 
-## - a) 使用 `readxl::excel_sheets` 取得 Excel 檔案的表單資訊（sheet）
+## 複習一下
+
+### `套件::函式（public）`
+
+### `套件:::函式（private）`
+
+![](./img/PACKAGE_1.png)
+
+![](./img/PACKAGE_2.png)
+
+## c-1 使用 `readxl::excel_sheets` 取得 Excel 檔案的表單資訊（sheet）
 
 ```{r}
 # library(readxl)
@@ -344,14 +353,14 @@ sheetNames <- readxl::excel_sheets(filename)
 sheetNames
 ```
 
-## - b) 利用 `readxl:::xlsx_col_types` 觀察資料中欄位的大小及資料型態，讓讀檔速度加快（執行時不用去猜資料的大小、格式與資料型態）
+## c-2 利用 `readxl:::xlsx_col_types` 觀察資料中欄位的大小及資料型態，讓讀檔速度加快（執行時不用去猜資料的大小、格式與資料型態）
 
 ```{r}
 colTypes <- readxl:::xlsx_col_types(path = filename, nskip = 10, n = 1)
 colTypes
 ```
 
-## - c) 再用 `readxl::read_excel` 讀檔
+## c-3 再用 `readxl::read_excel` 讀檔、`xlsx::write.xlsx2` 寫檔
 
 ```{r}
 resxl <- readxl::read_excel(filename, sheet = sheetNames[1], col_names = FALSE, skip = 8, col_types = colTypes)
@@ -388,8 +397,6 @@ creditData <- do.call("rbind", creditData)
 # View(creditData)
 setwd("../")
 ```
-
-<<<<<截圖解釋lapply>>>>>
 
 <!-- end of list -->
 
@@ -606,23 +613,24 @@ str(res)
 ![](./img/R_ETL_SCOPE.png)
 
 ## - 資料結構是重要的，三思而後行！
+#### 想想看，要排成怎樣的表格，才方便使用？
 
 ## - 觀察
-##    + (1) `head` + `tail` + `summary`
-##    + (2) `readLines` + `read.table`
-##    + (3) `readxl:::xlsx_col_types`
+#### RData/DataFrame：`head` + `tail` + `summary`
+#### txt/csv：`readLines` + `read.table`
+#### Excel：`readxl:::xlsx_col_types`
 
-## - Excel
-##    + (1) `gdata`
-##    + (2) `XLConnect` + `xlsx`
-##    + (3) `readxl`**
+## - Excel檔案
+#### `gdata`
+#### `XLConnect` + `xlsx`
+#### `readxl`
 
-## - `dplyr`
+## - `dplyr` <-> SQL
 
-## - Database: 
-##    + (1) Connect
-##    + (2) Query
-##    + (3) Disconnect
+## - 資料庫
+#### Connect
+#### Query
+#### Disconnect
 
 <!-- end of list -->
 
@@ -633,3 +641,19 @@ str(res)
 ## - [四周課程列表](./index.html)
 
 <!-- end of list -->
+
+---
+
+# 5 Appendix
+
+## 5.1.1 Read Excel Files (b) Solution
+
+### b-1 使用 `XLConnect::loadWorkbook` 取得 Excel 檔案的表單資訊（sheet）
+
+### b-2 接著利用 `xlsx::read.xlsx2`，先把前幾行資料讀進來觀察，預先設定欄位的大小及資料型態 `colClasses`，讓讀檔速度加快（執行時不用去猜資料的大小、格式與資料型態）
+
+### b-3 再用 `xlsx::read.xlsx2` 讀檔（較快），`xlsx::write.xlsx2` 寫檔
+
+<!-- end of list -->
+
+---
