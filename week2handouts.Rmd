@@ -10,13 +10,24 @@ date: "January 04, 2016"
 output: 
   html_document:
     toc: true
-    toc_depth: 2
+    toc_depth: 1
     theme: readable
     highlight: espresso
     css: main.css
 ---
 
-# 今天的題目是 ETL：什麼是 ETL？
+# 0 關於教材授權
+
+本教材之智慧財產權，
+屬木刻思股份有限公司所有。
+
+如果有朋友，覺得此教材很棒，希望能分享給朋友，或是拿此教材開課。非常歡迎大家來信至 course@agilearning.io 請求教材的使用授權唷！
+
+---
+
+# 1.1 什麼時候需要資料清理
+
+## - 
 
 ## E = Extract
 
@@ -24,9 +35,13 @@ output:
 
 ## L = Load
 
+## 上完這堂課，你會學到：
+
+![](./img/R_ETL_SCOPE.png)
+
 ---
 
-# 今天會用到的套件／重要函式：
+# 1.2 今天會用到的套件 `packages` 與重要函式 `functions`
 
 ## - `readLine` | `read.table`
 
@@ -47,7 +62,24 @@ library(RSQLite)
 
 <!-- end of list -->
 
-## 環境設定：rJava Installation
+# 1.3 範例資料準備
+
+## 1. 打開 `shell` 輸入指令下載資料集
+
+`git clone https://github.com/suensummit/RCourseBankSinoPac.git`
+
+## 2. 在 RStudio console 輸入指令，切換工作目錄並確認下載內容。
+
+```{r, eval=FALSE}
+setwd("RCourseBankSinoPac")
+```
+```{r}
+dir()
+```
+
+<!-- end of list -->
+
+# 1.4 環境設定： `rJava` 安裝
 
 在 Windows 系統裡使用 R，有時候會遇到一些棘手的 error；其中除了跟系統編碼（顯示亂碼）相關的問題以外，有一大宗都跟 `rJava` 這個套件有關。
 
@@ -63,7 +95,7 @@ library(RSQLite)
 
 ---
 
-# 暖身
+# 1.5 暖身
 
 ## 練習操作：複習 R 語法
 
@@ -107,26 +139,26 @@ nrow(iris)
 
 ---
 
-# 什麼是資料第二問：資料「應該」長怎樣？
+# 2.1 什麼是資料第二問：資料「應該」長怎樣
 
-<<<<<PCHOME截圖>>>>>
+![](./img/PCHOME.png)
 
-Data Schema Matters！
+### Data Schema Matters！
 
-資料結構是重要的
+### 資料結構是重要的
 
-以第一週 Yahoo Stock 資料為例
+## 2.1.1 以第一週 Yahoo Stock 資料為例
 
-<<<<<YAHOO截圖>>>>>
+![](./img/YAHOO_STOCK.png)
 
-[2451 創見](http://tw.stock.yahoo.com/d/s/major_2451.html)
+### [2330 台積電](http://tw.stock.yahoo.com/d/s/major_2330.html)
 
 ```{r}
 library(httr)
 library(rvest)
 
 ## Connector
-Target_URL = "http://tw.stock.yahoo.com/d/s/major_2451.html"
+Target_URL = "http://tw.stock.yahoo.com/d/s/major_2330.html"
 res <- GET(Target_URL)
 doc_str <- content(res, type = "text", encoding = "big5")
 
@@ -145,39 +177,43 @@ if (.Platform$OS.type == "windows"){
 data_table
 ```
 
-左右兩欄的表格應該整併成同一欄
+## 2.1.2 這樣的資料有什麼問題？
 
-並且加入時間欄位
+### 左右兩欄的表格應該整併成同一欄
 
-塞進資料庫／檔案做儲存
+### 並且加入時間欄位、股票名稱
+
+### 才能塞進資料庫／檔案做儲存或進一步應用
 
 ```{r}
 head(data_table)
 colnames(data_table) <- c("券商", "買進", "賣出", "差距", "券商", "買進", "賣出", "差距")
 stockMajor <- rbind(data_table[,1:4], data_table[,5:8])
-# stockMajor <- cbind(日期 = c(Sys.Date()), 股票代號 = c("2451"), 股票名稱 = c("創見"), stockMajor)
-stockMajor <- cbind(日期 = c("2015-12-31"), 股票代號 = c("2451"), 股票名稱 = c("創見"), stockMajor)
+# stockMajor <- cbind(日期 = c(Sys.Date()), 股票代號 = c("2330"), 股票名稱 = c("台積電"), stockMajor)
+stockMajor <- cbind(日期 = c("2015-12-31"), 股票代號 = c("2330"), 股票名稱 = c("台積電"), stockMajor)
 # View(stockMajor)
 head(stockMajor)
 ```
 
-- 範例：Yahoo Stock
+### 練習：Yahoo Stock
 
-- 練習：Yahoo Stock
-
-- 作業：無
-
-<!-- end of list -->
+### [2451 創見](http://tw.stock.yahoo.com/d/s/major_2451.html)
 
 ---
 
-# 基本資料讀寫
+# 2.2 處理一般文字資料
 
-我今天拿到一個文字檔案
+![](./img/R_ETL_SCOPE_1.png)
 
-首先，觀察檔案的格式、欄位、資料型態
+### 我今天拿到一個文字檔案
 
-## 利用 `readLines`，先把前幾筆資料讀進來觀察
+- 範例：[銀行局](https://survey.banking.gov.tw/statis/stmain.jsp?sys=100&funid=r100) 房貸餘額 [csv](https://raw.githubusercontent.com/suensummit/RCourseBankSinoPac/gh-pages/data/cl_info_other.csv)
+
+## 2.2.1 取得資料後的第一步，是「觀察」
+
+### 首先，觀察檔案的格式、欄位、資料型態
+
+### 利用 `readLines`，先把前幾筆資料讀進來觀察
 
 ```{r}
 res <- readLines(con = "data/cl_info_other.csv", n = 10L, encoding = "BIG-5")
@@ -185,11 +221,11 @@ iconv(res,from='utf8',to='big5')
 head(res)
 ```
 
-<<<<<分隔>>>>>
+### 其他都可以忘記，至少要記得 `read.table`
 
-## 其他都可以忘記，至少要記得 `read.table`
+## 2.2.2 利用觀察的結果「提供資訊」增進讀檔的效率
 
-## 利用 `colClasses` 指定資料中欄位的大小及資料型態，讓讀檔速度加快（執行時不用去猜資料的大小、格式與資料型態）
+### 利用 `colClasses` 指定資料中欄位的大小及資料型態，讓讀檔速度加快（執行時不用去猜資料的大小、格式與資料型態）
 
 ```{r}
 # library(RCurl)
@@ -200,31 +236,31 @@ head(Cl_info)
 str(Cl_info)
 ```
 
-### - 輸出形態為Data Frame
-### - file 就是指讀入的檔案路徑
-### - sep 指的是欄位分割用的符號,通常csv檔案格式是透過,做分割
-### - stringsAsFactors 預設是True, 讓讀入的字串用Factor儲存，那麼資料就會轉為整數儲存與對照表
-### - header 預設是False，表示第一行是不是表格標頭，輸出的dataframe欄位名的colnames
+### - 輸出形態為 Data Frame
 
-## 使用 `write.table` 寫資料
+### - `file` 就是指讀入的檔案路徑
+
+### - `sep` 指的是欄位分割用的符號,通常 csv 檔案格式是透過,做分割
+
+### - stringsAsFactors 預設是 `True`， 讓讀入的字串用 `factor` 儲存，那麼資料就會轉為整數儲存與對照表
+
+### - header 預設是 `False`，表示第一行是不是表格標頭，輸出的 data.frame 欄位名的 `colnames`
+
+## 2.2.3 
+
+### 使用 `write.table` 寫資料
 
 ```{r, eval=FALSE}
-write.table(x = Cl_info, file = "data/cl_info_other.csv", sep = ",", quote = FALSE)
+write.table(x = Cl_info, file = "data/cl_info_other_update.csv", sep = ",", quote = FALSE)
 ```
-
-[銀行局](https://survey.banking.gov.tw/statis/stmain.jsp?sys=100&funid=r100)
-
-- 範例：房貸餘額 [csv](https://raw.githubusercontent.com/suensummit/RCourseBankSinoPac/gh-pages/data/cl_info_other.csv)
-
-- 練習：
-
-- 作業：無
 
 <!-- end of list -->
 
 ---
 
-# 處理 Excel 資料
+# 2.3 處理 Excel 資料
+
+![](./img/R_ETL_SCOPE_2.png)
 
 ## Excel 不等於 Table！
 
@@ -260,7 +296,7 @@ library(readxl)
 
 ---
 
-# 觀察
+## 觀察
 
 首先，觀察檔案的格式、欄位、資料型態
 
@@ -318,9 +354,11 @@ setwd("../")
 
 ---
 
-# dplyr
+# 3.1 R ETL with `dplyr`
 
-接下來，真正開始用 R 來做 ETL 資料清理的工作。
+![](./img/R_ETL_SCOPE_3.png)
+
+接下來，真正開始在 R 裡面來做 ETL AKA 資料清理的工作。
 
 ## 簡介 `dplyr`
 
@@ -428,7 +466,9 @@ head(Cl_demo5)
 
 ---
 
-## 實際拿剛才的 EXCEL 資料來處理
+# 3.2 範例演練
+
+實際拿剛才的 EXCEL 資料來處理
 
 ```{r, eval=FALSE}
 # Example:
@@ -442,7 +482,9 @@ ggplot(try, aes(x = 月份, y = 流通卡數)) + geom_line()
 
 ---
 
-## R 與 Database 的串接：以 SQLite 為例
+# 3.3 R 與 Database 的串接：以 SQLite 為例
+
+![](./img/R_ETL_SCOPE_4.png)
 
 ```{r}
 library(DBI)
@@ -486,29 +528,31 @@ res <- read.csv("data/bank/bank-full.csv", header = TRUE, sep = ";")
 
 ---
 
-## Take Home Messages
+# 4.1 今日重點回顧：Take Home Messages
 
-### - 資料結構是重要的，三思而後行！
+![](./img/R_ETL_SCOPE.png)
 
-### - 觀察
-###    + (1) `head` + `tail` + `summary`
-###    + (2) `readLines` + `read.table`
-###    + (3) `readxl:::xlsx_col_types`
+## - 資料結構是重要的，三思而後行！
 
-### - Excel
-###    + (1) `gdata`
-###    + (2) `XLConnect` + `xlsx`
-###    + (3) `readxl`**
+## - 觀察
+##    + (1) `head` + `tail` + `summary`
+##    + (2) `readLines` + `read.table`
+##    + (3) `readxl:::xlsx_col_types`
 
-### - `dplyr`
+## - Excel
+##    + (1) `gdata`
+##    + (2) `XLConnect` + `xlsx`
+##    + (3) `readxl`**
 
-### - Database: 
-###    + (1) Connect
-###    + (2) Query
-###    + (3) Disconnect
+## - `dplyr`
+
+## - Database: 
+##    + (1) Connect
+##    + (2) Query
+##    + (3) Disconnect
 
 ---
 
-## Q & A
+# 4.2 Q & A
 
-[四周課程列表](./index.html)
+## - [四周課程列表](./index.html)

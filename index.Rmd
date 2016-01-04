@@ -2,7 +2,7 @@
 title: "木刻思Ｒ語言課程"
 subtitle: 永豐銀行
 author:
-    name: "Summit Suen, Chih-Ping Chao, Chia-Chi Chang"
+    name: "Chia-Chi Chang, Chih-Ping Chao, Summit Suen"
     affiliation: 木刻思股份有限公司
     email: "course@agilearning.io, george@data-sci.info, summit.suen@data-sci.info"
     website: "https://data-sci.info"
