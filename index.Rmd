@@ -16,7 +16,6 @@ output:
 ---
 
 # 第一堂 `2015/12/18`：Ｒ語言網路爬蟲
-- ## [投影片](https://goo.gl/48WIU4) 
 - ## [講義](http://whizzalan.github.io/RCrawlerCrashCourse/)
 
 # 第二堂 `2016/01/04`：Ｒ語言資料清理
