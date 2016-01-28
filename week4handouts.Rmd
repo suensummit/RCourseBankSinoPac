@@ -1,0 +1,180 @@
+---
+title: "永豐銀行Ｒ語言課程"
+subtitle: "第四堂：Ｒ語言資料探勘"
+author:
+    name: "Summit Suen"
+    affiliation: 木刻思股份有限公司
+    email: "course@agilearning.io, summit.suen@data-sci.info"
+    website: "https://data-sci.info"
+date: "January 29, 2016"
+output:
+  ioslides_presentation:
+    widescreen: true
+    incremental: true
+    css: wk4.css
+---
+
+# 用Ｒ實作決策樹－名人堂票選
+
+## 名人堂票選 {.fullpage}
+
+![](http://mediadownloads.mlb.com/mlbam/2016/01/04/images/mlbf_535822283_th_45.jpg)
+
+## 工具一覽
+
+> - `mosaic` 資料清理使用，裡面也使用了 `dplyr`。
+
+> - `Lahman` 包含了從 1871 年開始直到 2014 年的（2015 待更新）美國職棒大聯盟（MLB）各項數據。
+
+> - `rpart` 決策樹套件。
+
+> - `maptree` / `rpart.plot` 決策樹繪製。
+
+```{r}
+# install.packages("mosaic")
+# install.packages("Lahman")
+# install.packages("rpart")
+# install.packages("maptree")
+# install.packages("rpart.plot")
+library(mosaic); library(Lahman); library(rpart); library(maptree); library(rpart.plot)
+```
+
+## 決策樹作為分類器 {.columns-2}
+
+![](https://baseballwithr.files.wordpress.com/2014/11/unnamed-chunk-9-1.png)
+
+- 作為一個模型 `model`，分類器 `classifier` 是根據一些二元的變量 `binary response variable`，將資料不斷地分割 `partition`，使得每個分支下都是更相近、更「純」的子集 `subset`。
+
+- 以今天的案例來說，我們的二元變數就是：「是否有被選進過名人堂？」
+
+## 資料取得：分類用的依據 `binary response variable`
+
+> - 在 `Lahman` 資料集裡面，有提供 `HallOfFame` 的資料。
+
+```{r}
+inductees <-
+  HallOfFame %>%
+  group_by(playerID) %>%
+  filter(votedBy %in% c("BBWAA", "Special Election") & category == "Player") %>%
+  summarise(yearsOnBallot = n(), inducted = sum(inducted == "Y"), best = max(votes/ballots)) %>%
+  arrange(desc(best))
+head(inductees)
+```
+
+## 資料取得：訓練資料 `training data`
+
+> - 為了訓練我們的模型，需要定義我們的解釋變數。
+
+> - 首先是打擊數據
+
+- 為了簡化，我們只參考安打數以及全壘打數。
+
+```{r}
+batting <-
+  Batting %>% group_by(playerID) %>%
+  summarise(numSeasons = length(unique(yearID)), lastSeason = max(yearID), tH = sum(H), tHR = sum(HR)) %>%
+  arrange(desc(tH))
+head(batting)
+```
+
+## 資料取得：訓練資料 `training data`
+
+> - 為了訓練我們的模型，需要定義我們的解釋變數。
+
+> - 接著是投球數據
+
+- 為了簡化，我們只參考勝場數、三振數以及救援成功數。
+
+```{r}
+pitching <-
+  Pitching %>% group_by(playerID) %>%
+  summarise(numSeasons = length(unique(yearID)), lastSeason = max(yearID), tW = sum(W), tSO = sum(SO), tSV = sum(SV)) %>%
+  arrange(desc(tW))
+head(pitching)
+```
+
+## 資料取得：訓練資料 `training data`
+
+> - 為了訓練我們的模型，需要定義我們的解釋變數。
+
+> - 最後是各項聯盟獎項的數據
+
+- 為了簡化，我們只參考ＭＶＰ、賽揚獎以及金手套獎。
+
+```{r}
+awards <-
+  AwardsPlayers %>% group_by(playerID) %>%
+  summarise(mvp = sum(awardID == "Most Valuable Player"), gg = sum(awardID == "Gold Glove"), cy = sum(awardID == "Cy Young Award"))
+head(awards, 2)
+```
+
+## 資料取得：訓練資料 `training data`
+
+```{r}
+candidates = merge(x=batting, y=pitching, by="playerID", all=TRUE)
+candidates = merge(x=candidates, y=awards, by="playerID", all.x=TRUE)
+candidates = merge(x=candidates, y=inductees, by="playerID") # join
+```
+
+- 把這幾個資料合併成一個 `data.frame`，以球員 `playerID` 作為索引，每筆資料都是單一球員的生涯數據。
+
+- 因為這裡我們只要考慮有進入過名人堂票選的選手，因此可以注意到第三行程式碼其實等於是直接做 `join`。
+
+## 資料取得：訓練資料 `training data`
+
+```{r}
+head(candidates, 3)
+```
+
+- 資料裡面很多 `NA` 缺失值，因為把野手跟投手放在一起。
+
+## 資料取得：訓練資料 `training data`
+
+```{r}
+candidates[is.na(candidates)] <- 0
+head(candidates, 3)
+```
+
+- 在這個場合下，我們直接補 `0`。
+
+## 模型建構：`rpart`－`r`ecursive `part`itioning
+
+> - 在 `rpart` 中利用 `formula` "~" 建構模型。
+
+```{r}
+library(rpart)
+mod = rpart(as.factor(inducted) ~ tH + tHR + mvp + gg + tW + tSO + tSV + cy, data=candidates)
+plot(mod); text(mod)
+```
+
+## 決策樹呈現：`maptree`
+
+```{r}
+library(maptree)
+draw.tree(mod)
+```
+
+## 決策樹呈現：`rpart.plot`
+
+```{r}
+library(rpart.plot)
+rpart.plot(mod)
+```
+
+## 結果驗證：`confusion table`
+
+```{r}
+candidates <- mutate(candidates, y.hat = predict(mod, type="class"), induct.prob = predict(mod)[,2])
+confusion = tally(y.hat ~ inducted, data=candidates, format="count")
+confusion
+sum(diag(confusion)) / sum(confusion)
+```
+
+# Ｑ＆Ａ
+
+## 參考資料 {.smaller}
+
+> - [Building a Hall of Fame Classifier](https://baseballwithr.wordpress.com/2014/11/18/building-a-hall-of-fame-classifier-2/)
+> - [rpart.plot](http://www.milbo.org/rpart-plot/)
+
+# Take A Break

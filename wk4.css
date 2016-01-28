@@ -1,0 +1,9 @@
+.fullpage > img {
+  bottom: 0;
+  position: absolute;
+  height: 100%;
+}
+
+.columns-2 > img {
+  width: 100%;
+}
