@@ -145,6 +145,13 @@ head(candidates, 3)
 library(rpart)
 mod = rpart(as.factor(inducted) ~ tH + tHR + mvp + gg + tW + tSO + tSV + cy, 
             data = candidates, method = "class") # method = c("anova","poisson","class","exp")
+mod$variable.importance
+head(mod$frame)
+```
+
+## 決策樹呈現：`graphic`
+
+```{r}
 par(xpd = TRUE); plot(mod); text(mod)
 ```
 
@@ -159,7 +166,7 @@ draw.tree(mod)
 
 ```{r}
 library(rpart.plot)
-rpart.plot(mod)
+rpart.plot(mod, box.col = ifelse(mod$frame$yval == 1, 'grey', 'green'))
 ```
 
 ## 結果驗證：`confusion table`
