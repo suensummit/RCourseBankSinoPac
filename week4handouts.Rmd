@@ -137,14 +137,15 @@ head(candidates, 3)
 
 - 在這個場合下，我們直接補 `0`。
 
-## 模型建構：`rpart`－`r`ecursive `part`itioning
+## 模型建構：`rpart`－Recursive PARTitioning
 
 > - 在 `rpart` 中利用 `formula` "~" 建構模型。
 
 ```{r}
 library(rpart)
-mod = rpart(as.factor(inducted) ~ tH + tHR + mvp + gg + tW + tSO + tSV + cy, data=candidates)
-plot(mod); text(mod)
+mod = rpart(as.factor(inducted) ~ tH + tHR + mvp + gg + tW + tSO + tSV + cy, 
+            data = candidates, method = "class") # method = c("anova","poisson","class","exp")
+par(xpd = TRUE); plot(mod); text(mod)
 ```
 
 ## 決策樹呈現：`maptree`
