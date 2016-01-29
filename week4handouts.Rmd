@@ -144,9 +144,20 @@ head(candidates, 3)
 ```{r}
 library(rpart)
 mod = rpart(as.factor(inducted) ~ tH + tHR + mvp + gg + tW + tSO + tSV + cy, 
-            data = candidates, method = "class") # method = c("anova","poisson","class","exp")
+            data = candidates) # method = c("anova","poisson","class","exp")
 mod$variable.importance
+```
+
+## 模型建構：`rpart`－Recursive PARTitioning
+
+```{r}
 head(mod$frame)
+```
+
+## 模型建構：`rpart`－Recursive PARTitioning
+
+```{r}
+mod
 ```
 
 ## 決策樹呈現：`graphic`

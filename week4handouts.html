@@ -347,13 +347,15 @@ head(candidates, 3)</pre>
 
 <pre class = 'prettyprint lang-r'>library(rpart)
 mod = rpart(as.factor(inducted) ~ tH + tHR + mvp + gg + tW + tSO + tSV + cy, 
-            data = candidates, method = &quot;class&quot;) # method = c(&quot;anova&quot;,&quot;poisson&quot;,&quot;class&quot;,&quot;exp&quot;)
+            data = candidates) # method = c(&quot;anova&quot;,&quot;poisson&quot;,&quot;class&quot;,&quot;exp&quot;)
 mod$variable.importance</pre>
 
 <pre >##        tH        tW       mvp       tSO       tHR        cy        gg 
 ## 52.793307 32.157822 19.335014 17.615083 10.889410 10.425217  3.057658 
 ##       tSV 
 ##  2.596990</pre>
+
+</article></slide><slide class=''><hgroup><h2>模型建構：<code>rpart</code>－Recursive PARTitioning</h2></hgroup><article  id="rpartrecursive-partitioning-1">
 
 <pre class = 'prettyprint lang-r'>head(mod$frame)</pre>
 
@@ -371,6 +373,37 @@ mod$variable.importance</pre>
 ## 8  938.00000000  38.00000000   0.96106557   0.03893443     0.89051095
 ## 16 885.00000000  23.00000000   0.97466960   0.02533040     0.82846715
 ## 32 850.00000000  15.00000000   0.98265896   0.01734104     0.78923358</pre>
+
+</article></slide><slide class=''><hgroup><h2>模型建構：<code>rpart</code>－Recursive PARTitioning</h2></hgroup><article  id="rpartrecursive-partitioning-2">
+
+<pre class = 'prettyprint lang-r'>mod</pre>
+
+<pre >## n= 1096 
+## 
+## node), split, n, loss, yval, (yprob)
+##       * denotes terminal node
+## 
+##  1) root 1096 116 0 (0.89416058 0.10583942)  
+##    2) tH&lt; 2578.5 1024  71 0 (0.93066406 0.06933594)  
+##      4) tW&lt; 249 990  48 0 (0.95151515 0.04848485)  
+##        8) mvp&lt; 1.5 976  38 0 (0.96106557 0.03893443)  
+##         16) mvp&lt; 0.5 908  23 0 (0.97466960 0.02533040)  
+##           32) tW&lt; 205.5 865  15 0 (0.98265896 0.01734104) *
+##           33) tW&gt;=205.5 43   8 0 (0.81395349 0.18604651)  
+##             66) cy&lt; 0.5 36   3 0 (0.91666667 0.08333333) *
+##             67) cy&gt;=0.5 7   2 1 (0.28571429 0.71428571) *
+##         17) mvp&gt;=0.5 68  15 0 (0.77941176 0.22058824)  
+##           34) tSO&lt; 1146 61  10 0 (0.83606557 0.16393443) *
+##           35) tSO&gt;=1146 7   2 1 (0.28571429 0.71428571) *
+##        9) mvp&gt;=1.5 14   4 1 (0.28571429 0.71428571) *
+##      5) tW&gt;=249 34  11 1 (0.32352941 0.67647059)  
+##       10) tSO&lt; 2490 16   7 0 (0.56250000 0.43750000) *
+##       11) tSO&gt;=2490 18   2 1 (0.11111111 0.88888889) *
+##    3) tH&gt;=2578.5 72  27 1 (0.37500000 0.62500000)  
+##      6) tH&lt; 2993.5 46  21 0 (0.54347826 0.45652174)  
+##       12) tHR&lt; 405 34  11 0 (0.67647059 0.32352941) *
+##       13) tHR&gt;=405 12   2 1 (0.16666667 0.83333333) *
+##      7) tH&gt;=2993.5 26   2 1 (0.07692308 0.92307692) *</pre>
 
 </article></slide><slide class=''><hgroup><h2>決策樹呈現：<code>graphic</code></h2></hgroup><article  id="graphic">
 
